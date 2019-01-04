@@ -1,6 +1,8 @@
 api_platform:
     mapping:
-        paths: ['%kernel.project_dir%/src/Entity']
+        paths:
+            - '%kernel.project_dir%/src/Application/Projection'
+            - '%kernel.project_dir%/config/packages/api_platform_resources'
 
     formats:
         json:

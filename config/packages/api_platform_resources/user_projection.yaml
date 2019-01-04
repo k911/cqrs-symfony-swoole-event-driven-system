@@ -1,0 +1,15 @@
+App\Application\Projection\UserProjection:
+  shortName: User
+  attributes:
+    normalization_context:
+      groups: ['UserRead']
+    denormalization_context:
+      groups: ['UserWrite']
+  collectionOperations:
+    post:
+      method: POST
+      controller: App\Application\Action\CreateUserAction
+  itemOperations:
+    get:
+      method: GET
+      controller: App\Application\Action\GetUserAction

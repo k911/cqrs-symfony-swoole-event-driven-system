@@ -1,0 +1,22 @@
+POST http://localhost:9501/api/users
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "test@test.pl",
+    "roles": [
+        "ROLE_USER",
+        "ROLE_TEST"
+    ]
+}
+
+> {% client.global.set("user_id", response.body.id); %}
+
+###
+
+GET http://localhost:9501/api/users/{{user_id}}
+Authorization: Bearer {{auth_token}}
+Accept: application/ld+json
+
+###
