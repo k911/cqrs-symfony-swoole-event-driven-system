@@ -1,0 +1,89 @@
+version: '3.7'
+services:
+  api:
+    image: app-api:local
+    command:
+      - swoole:server:run
+      - --host=0.0.0.0
+      - --port=8080
+    build:
+      context: .
+      target: SymfonyConsole
+    env_file: .env.docker
+    ports:
+      - "80:8080"
+
+  console:
+    image: app-console:local
+    build:
+      context: .
+      target: SymfonyConsole
+    env_file: .env.docker
+    volumes:
+      - './public:/usr/src/app/public:ro'
+      - './src:/usr/src/app/src:ro'
+      - './config:/usr/src/app/config:ro'
+
+  composer:
+    image: app-composer:local
+    build:
+      context: .
+      target: Composer
+    env_file: .env.docker
+    volumes:
+      - './public:/usr/src/app/public:ro'
+      - './src:/usr/src/app/src:ro'
+      - './config:/usr/src/app/config:ro'
+
+  redis:
+    image: redis:5-alpine
+    ports:
+      - '6379:6379'
+
+  rabbitmq:
+    image: rabbitmq:3.7-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=Passw0rd
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+#  elasticsearch:
+#    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.5.4
+#    environment:
+#      - cluster.name=docker-cluster
+#      - bootstrap.memory_lock=true
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    volumes:
+#      - esdata1:/usr/share/elasticsearch/data
+#    ports:
+#      - 9200:9200
+
+  pma:
+    image: phpmyadmin/phpmyadmin:4.7
+    depends_on:
+      - mysql
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=Passw0rd
+    ports:
+      - "8080:80"
+
+volumes:
+  mysql_data: {}
+#  esdata1: {}
