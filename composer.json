@@ -1,15 +1,28 @@
 {
     "type": "project",
+    "name": "k911/inz-final-app",
+    "description": "Finial Inz App",
     "license": "proprietary",
     "require": {
         "php": "^7.1.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "api-platform/api-pack": "^1.1",
+        "k911/swoole-bundle": "^0.4.2",
+        "lexik/jwt-authentication-bundle": "^2.6",
+        "predis/predis": "^1.1",
+        "ramsey/uuid": "^3.8",
+        "ramsey/uuid-doctrine": "^1.5",
         "symfony/console": "4.2.*",
-        "symfony/dotenv": "4.2.*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "4.2.*",
-        "symfony/yaml": "4.2.*"
+        "symfony/messenger": "4.2.*",
+        "symfony/monolog-bundle": "^3.3",
+        "symfony/orm-pack": "^1.0",
+        "symfony/twig-bundle": "4.2.*",
+        "symfony/validator": "4.2.*",
+        "symfony/yaml": "4.2.*",
+        "webonyx/graphql-php": "^0.13.0"
     },
     "config": {
         "preferred-install": {
@@ -52,8 +65,13 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "4.2.*"
         }
+    },
+    "require-dev": {
+        "symfony/debug-pack": "^1.0",
+        "symfony/dotenv": "4.2.*",
+        "symfony/maker-bundle": "^1.11"
     }
 }
