@@ -1,0 +1,25 @@
+GET http://localhost:9501/api/docs
+Accept: application/json
+
+###
+
+GET http://localhost:9501/api/docs
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+
+POST http://localhost:9501/api/token
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "super@admin.pl",
+    "password": "password"
+}
+
+> {% client.global.set("auth_token", response.body.token); %}
+
+
+
+###

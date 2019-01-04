@@ -16,3 +16,6 @@ indent_size = 4
 
 [config/*.yaml]
 indent_size = 4
+
+[config/packages/*.yaml]
+indent_size = 4
