@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Projection;
@@ -10,11 +11,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class UserProjection
 {
-
     /**
      * @ApiProperty(identifier=true)
      * @Groups({"UserRead","UserUpdate"})
      * @Assert\Uuid()
+     *
      * @var UuidInterface
      */
     public $id;
@@ -22,14 +23,15 @@ final class UserProjection
     /**
      * @Groups({"UserRead","UserWrite","UserUpdate"})
      * @Assert\Email()
+     *
      * @var string
      */
     public $email;
 
     /**
      * @Groups({"UserRead","UserWrite","UserUpdate"})
+     *
      * @var string[]
      */
     public $roles;
-
 }

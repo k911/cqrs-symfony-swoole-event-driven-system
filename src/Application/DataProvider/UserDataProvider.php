@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\DataProvider;
@@ -19,6 +20,7 @@ final class UserDataProvider implements ItemDataProviderInterface, RestrictedDat
     {
         $userProjection = new UserProjection();
         $userProjection->id = Uuid::fromString($id);
+
         return $userProjection;
     }
 }

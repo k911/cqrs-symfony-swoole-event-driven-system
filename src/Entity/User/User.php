@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\User;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -71,7 +73,7 @@ class User implements UserInterface
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
+        return \array_unique($roles);
     }
 
     public function setRoles(array $roles): void
@@ -95,7 +97,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getSalt()
+    public function getSalt(): void
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
     }

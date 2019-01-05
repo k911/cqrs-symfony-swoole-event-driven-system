@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataFixtures;
 
 use App\Entity\User\User;
@@ -19,6 +21,7 @@ class UserFixtures extends Fixture
 
     /**
      * @param ObjectManager $manager
+     *
      * @throws \Exception
      */
     public function load(ObjectManager $manager): void

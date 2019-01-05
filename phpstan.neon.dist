@@ -1,0 +1,7 @@
+includes:
+    # - vendor/phpstan/phpstan-beberlei-assert/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+parameters:
+    excludes_analyse:
+    ignoreErrors:
+        # Put false positives here

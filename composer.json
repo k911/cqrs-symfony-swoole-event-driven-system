@@ -50,6 +50,14 @@
         "symfony/polyfill-php56": "*"
     },
     "scripts": {
+        "analyse": [
+            "phpstan analyze src -l 7 --ansi",
+            "php-cs-fixer fix -v --dry-run --diff --stop-on-violation --ansi"
+        ],
+        "test": [
+            "@analyse"
+        ],
+        "fix": "php-cs-fixer fix -v --ansi",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
@@ -72,6 +80,9 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.1",
+        "friendsofphp/php-cs-fixer": "^2.14",
+        "phpstan/phpstan": "^0.10.7",
+        "phpstan/phpstan-doctrine": "^0.10.0",
         "symfony/debug-pack": "^1.0",
         "symfony/dotenv": "4.2.*",
         "symfony/maker-bundle": "^1.11"

@@ -14,6 +14,12 @@
     "beberlei/assert": {
         "version": "v3.2.0"
     },
+    "composer/semver": {
+        "version": "1.4.2"
+    },
+    "composer/xdebug-handler": {
+        "version": "1.3.1"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -101,8 +107,20 @@
             "ref": "70062abc2cd58794d2a90274502f81b55cd9951b"
         }
     },
+    "friendsofphp/php-cs-fixer": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.2",
+            "ref": "81dee417d2cc60cd1c9d6208dff2ec22a1103e93"
+        }
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
+    },
+    "jean85/pretty-package-versions": {
+        "version": "1.2"
     },
     "k911/swoole-bundle": {
         "version": "v0.4.2"
@@ -134,6 +152,27 @@
             "ref": "f0436fc35fca88eada758311f8de43bfb61f1980"
         }
     },
+    "nette/bootstrap": {
+        "version": "v2.4.6"
+    },
+    "nette/di": {
+        "version": "v2.4.14"
+    },
+    "nette/finder": {
+        "version": "v2.4.2"
+    },
+    "nette/neon": {
+        "version": "v2.4.3"
+    },
+    "nette/php-generator": {
+        "version": "v3.0.5"
+    },
+    "nette/robot-loader": {
+        "version": "v3.1.0"
+    },
+    "nette/utils": {
+        "version": "v2.5.3"
+    },
     "nikic/php-parser": {
         "version": "v4.1.1"
     },
@@ -143,6 +182,9 @@
     "ocramius/proxy-manager": {
         "version": "2.2.2"
     },
+    "php-cs-fixer/diff": {
+        "version": "v1.3.0"
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },
@@ -151,6 +193,15 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
+    },
+    "phpstan/phpdoc-parser": {
+        "version": "0.3"
+    },
+    "phpstan/phpstan": {
+        "version": "0.10.7"
+    },
+    "phpstan/phpstan-doctrine": {
+        "version": "0.10"
     },
     "predis/predis": {
         "version": "v1.1.1"
@@ -292,6 +343,9 @@
             "version": "3.1",
             "ref": "18ebf5a940573a20de06f9c4060101eeb438cf3d"
         }
+    },
+    "symfony/options-resolver": {
+        "version": "v4.2.1"
     },
     "symfony/orm-pack": {
         "version": "v1.0.5"
