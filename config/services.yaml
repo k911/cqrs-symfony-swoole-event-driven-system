@@ -6,7 +6,7 @@ services:
         autowire: true
         autoconfigure: true
         bind:
-#            $commandBus: '@messenger.bus.commands'
+            $commandBus: '@messenger.bus.commands'
 #            $queryBus: '@messenger.bus.queries'
 #            $eventBus: '@messenger.bus.events'
 
@@ -14,9 +14,13 @@ services:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Domain,Migrations,Tests,Kernel.php}'
 
+    App\Application\Command\Handler\:
+        resource: '../src/Application/Command/Handler'
+        tags: [{ name: messenger.message_handler, bus: messenger.bus.commands }]
+
     App\Application\Action\:
         resource: '../src/Application/Action'
-        tags: ['controller.service_arguments']
+        tags: [controller.service_arguments]
 
     App\Domain\User\UserRepositoryInterface:
         class: App\Infrastructure\ORM\Repository\UserRepository

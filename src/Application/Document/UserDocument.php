@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Projection;
+namespace App\Application\Document;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Domain\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserProjection
+final class UserDocument
 {
     /**
      * @ApiProperty(identifier=true)
@@ -36,6 +36,13 @@ final class UserProjection
     public $roles;
 
     /**
+     * @Groups({"UserWrite","UserUpdate"})
+     *
+     * @var string
+     */
+    public $plainPassword;
+
+    /**
      * @return string[]
      */
     public function getRoles(): array
@@ -45,19 +52,19 @@ final class UserProjection
 
     public static function fromId(string $id): self
     {
-        $projection = new self();
-        $projection->id = $id;
+        $document = new self();
+        $document->id = $id;
 
-        return $projection;
+        return $document;
     }
 
     public static function fromUser(UserInterface $source): self
     {
-        $projection = new self();
-        $projection->id = $source->getId()->toString();
-        $projection->email = $source->getEmail()->toString();
-        $projection->roles = $source->getRoles();
+        $document = new self();
+        $document->id = $source->getId()->toString();
+        $document->email = $source->getEmail()->toString();
+        $document->roles = $source->getRoles();
 
-        return $projection;
+        return $document;
     }
 }

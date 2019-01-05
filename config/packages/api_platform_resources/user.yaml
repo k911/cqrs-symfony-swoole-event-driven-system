@@ -1,4 +1,4 @@
-App\Application\Projection\UserProjection:
+App\Application\Document\UserDocument:
   shortName: User
   attributes:
     normalization_context:

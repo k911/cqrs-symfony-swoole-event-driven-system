@@ -6,17 +6,17 @@ namespace App\Application\DataProvider;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
-use App\Application\Projection\UserProjection;
+use App\Application\Document\UserDocument;
 
 final class UserDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return UserProjection::class === $resourceClass;
+        return UserDocument::class === $resourceClass;
     }
 
-    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?UserProjection
+    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?UserDocument
     {
-        return UserProjection::fromId($id);
+        return UserDocument::fromId($id);
     }
 }
