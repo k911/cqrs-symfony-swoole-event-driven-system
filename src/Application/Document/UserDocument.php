@@ -42,12 +42,13 @@ final class UserDocument
      */
     public $plainPassword;
 
-    /**
-     * @return string[]
-     */
-    public function getRoles(): array
+    public function isGranted(object $user): bool
     {
-        return $this->roles;
+        if ($user instanceof UserInterface) {
+            return $this->id === $user->getId()->toString();
+        }
+
+        return false;
     }
 
     public static function fromId(string $id): self

@@ -21,3 +21,20 @@ Authorization: Bearer {{auth_token}}
 Accept: application/ld+json
 
 ###
+
+###
+
+POST http://localhost:9501/api/token
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "test@test.pl",
+    "password": "test@test"
+}
+
+> {%
+client.global.set("auth_token", response.body.token);
+%}
+
+###
