@@ -1,12 +1,3 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
-
-#api_user_create:
-#    controller:
-#    path: /api/users
-#    methods: ['POST']
-
 api_login_check:
     path: /api/token
     methods: ['POST']

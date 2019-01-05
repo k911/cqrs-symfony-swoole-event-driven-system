@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Entity\User\User;
+use App\Domain\User\User;
+use App\Domain\User\UserEmail;
+use App\Infrastructure\Uuid\RamseyUuidUserId;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFixtures extends Fixture
@@ -26,7 +27,10 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        $admin = new User(Uuid::uuid4(), 'super@admin.pl');
+        $admin = new User(
+            RamseyUuidUserId::fromUuid4(),
+            new UserEmail('super@admin.pl')
+        );
         $admin->setRoles([
             'ROLE_ADMIN',
         ]);

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Projection;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
-use Ramsey\Uuid\UuidInterface;
+use App\Domain\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -16,7 +16,7 @@ final class UserProjection
      * @Groups({"UserRead","UserUpdate"})
      * @Assert\Uuid()
      *
-     * @var UuidInterface
+     * @var string
      */
     public $id;
 
@@ -34,4 +34,30 @@ final class UserProjection
      * @var string[]
      */
     public $roles;
+
+    /**
+     * @return string[]
+     */
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    public static function fromId(string $id): self
+    {
+        $projection = new self();
+        $projection->id = $id;
+
+        return $projection;
+    }
+
+    public static function fromUser(UserInterface $source): self
+    {
+        $projection = new self();
+        $projection->id = $source->getId()->toString();
+        $projection->email = $source->getEmail()->toString();
+        $projection->roles = $source->getRoles();
+
+        return $projection;
+    }
 }

@@ -15,8 +15,12 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:9501/api/users/{{user_id}}
+GET http://localhost:9501/api/users/c6f905eb-22a5-4a84-a926-cd6079f7844b
 Authorization: Bearer {{auth_token}}
 Accept: application/ld+json
 
 ###
+
+GET http://localhost:9501/api/users/{{my_user_id}}
+Authorization: Bearer {{auth_token}}
+Accept: application/ld+json

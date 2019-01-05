@@ -7,7 +7,6 @@ namespace App\Application\DataProvider;
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Application\Projection\UserProjection;
-use Ramsey\Uuid\Uuid;
 
 final class UserDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
@@ -18,9 +17,6 @@ final class UserDataProvider implements ItemDataProviderInterface, RestrictedDat
 
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?UserProjection
     {
-        $userProjection = new UserProjection();
-        $userProjection->id = Uuid::fromString($id);
-
-        return $userProjection;
+        return UserProjection::fromId($id);
     }
 }

@@ -2,25 +2,26 @@
 
 declare(strict_types=1);
 
-namespace App\Entity\User;
+namespace App\Domain\User;
 
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="App\Infrastructure\ORM\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements SymfonyUserInterface, UserInterface
 {
     /**
      * @ORM\Id()
-     * @ORM\Column(type="uuid")
+     * @ORM\Column(type="user_id")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @var UserEmail
+     *
+     * @ORM\Column(type="user_email", length=180, unique=true)
      */
     private $email;
 
@@ -35,23 +36,23 @@ class User implements UserInterface
      */
     private $passwordHash;
 
-    public function __construct(UuidInterface $userId, string $userEmail)
+    public function __construct(UserIdInterface $userId, UserEmail $userEmail)
     {
         $this->id = $userId;
         $this->email = $userEmail;
     }
 
-    public function getId(): UuidInterface
+    public function getId(): UserIdInterface
     {
         return $this->id;
     }
 
-    public function getEmail(): string
+    public function getEmail(): UserEmailInterface
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail(UserEmail $email): void
     {
         $this->email = $email;
     }
@@ -61,7 +62,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return $this->email;
+        return $this->email->toString();
     }
 
     /**

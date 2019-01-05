@@ -12,6 +12,11 @@ framework:
         cookie_secure: auto
         cookie_samesite: lax
 
+    serializer:
+        enabled: true
+        mapping:
+            paths: ['%kernel.project_dir%/config/packages/serialization/']
+
     #esi: true
     #fragments: true
     php_errors:

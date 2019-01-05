@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\User\Command\Handler;
+namespace App\Application\Command\Handler;
 
 class CreateUserHandler
 {

@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Application\Action;
 
 use App\Application\Projection\UserProjection;
-use Ramsey\Uuid\Uuid;
+use App\Infrastructure\Uuid\RamseyUuidUserId;
 
 final class CreateUserAction
 {
     public function __invoke(UserProjection $data): UserProjection
     {
-        $userId = Uuid::uuid4();
-        $data->id = $userId;
-        dump($userId);
+        $data->id = RamseyUuidUserId::fromUuid4()->toString();
+
+        dump($data);
 
         return $data;
     }

@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Infrastructure\ORM\Repository;
 
-use App\Entity\User\User;
+use App\Domain\User\User;
+use App\Domain\User\UserEmailInterface;
+use App\Domain\User\UserIdInterface;
+use App\Domain\User\UserInterface;
+use App\Domain\User\UserRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -14,7 +18,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository
+class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {
     public function __construct(RegistryInterface $registry)
     {
@@ -49,4 +53,24 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findById(UserIdInterface $userId): ?UserInterface
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.id = :val')
+            ->setParameter('val', $userId)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
+    public function findByEmail(UserEmailInterface $userEmail): ?UserInterface
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.email = :val')
+            ->setParameter('val', $userEmail)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 }

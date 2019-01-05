@@ -16,14 +16,17 @@ doctrine:
             collate: utf8mb4_unicode_ci
 
         url: '%env(resolve:DATABASE_URL)%'
+        types:
+            user_id: 'App\Infrastructure\ORM\Type\UserIdType'
+            user_email: 'App\Infrastructure\ORM\Type\UserEmailType'
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
-            App:
+            AppUser:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
+                dir: '%kernel.project_dir%/src/Domain/User'
+                prefix: 'App\Domain\User'
+                alias: AppUser
