@@ -93,11 +93,6 @@ class User implements SymfonyUserInterface, UserInterface
         return $this->passwordHash;
     }
 
-    public function setPassword(string $password): void
-    {
-        $this->passwordHash = $password;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -119,5 +114,10 @@ class User implements SymfonyUserInterface, UserInterface
             new UserEmail($event->getEmail()),
             $event->getPasswordHash(),
             $event->getRoles());
+    }
+
+    public function applyChangePassword(Event\UserPasswordChanged $event): void
+    {
+        $this->passwordHash = $event->getNewPasswordHash();
     }
 }

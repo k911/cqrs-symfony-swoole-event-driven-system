@@ -7,7 +7,7 @@ namespace App\Application\Command;
 use App\Application\Document\UserDocument;
 use Assert\Assertion;
 
-class CreateUserCommand
+final class CreateUserCommand
 {
     /**
      * @var string

@@ -24,6 +24,9 @@ api_platform:
         jsonapi:
             mime_types: ['application/vnd.api+json']
 
+    exception_to_status:
+        Assert\InvalidArgumentException: 400
+
     # Enable Swagger UI authorization.
     swagger:
         api_keys:

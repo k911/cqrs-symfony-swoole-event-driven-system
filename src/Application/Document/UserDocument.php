@@ -91,7 +91,7 @@ final class UserDocument implements SymfonyUserInterface, IdentifiedDocumentInte
      */
     public function getPassword(): string
     {
-        return $this->passwordHash;
+        return $this->passwordHash ?? '';
     }
 
     /**

@@ -6,6 +6,8 @@ namespace App\Application\Action;
 
 use App\Application\Command\CreateUserCommand;
 use App\Application\Document\UserDocument;
+use App\Domain\User\UserEmail;
+use App\Domain\User\UserRepositoryInterface;
 use App\Infrastructure\Uuid\RamseyUuidUserId;
 use Assert\Assertion;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -15,15 +17,23 @@ final class CreateUserAction
 {
     private $commandBus;
     private $userPasswordEncoder;
+    private $userRepository;
 
-    public function __construct(MessageBusInterface $commandBus, UserPasswordEncoderInterface $userPasswordEncoder)
+    public function __construct(
+        MessageBusInterface $commandBus,
+        UserPasswordEncoderInterface $userPasswordEncoder,
+        UserRepositoryInterface $userRepository
+    )
     {
         $this->commandBus = $commandBus;
         $this->userPasswordEncoder = $userPasswordEncoder;
+        $this->userRepository = $userRepository;
     }
 
     public function __invoke(UserDocument $data): UserDocument
     {
+        Assertion::null($this->userRepository->findByEmail(new UserEmail($data->email)), 'Could not create user.');
+
         if (null === $data->id) {
             $data->id = RamseyUuidUserId::fromUuid4()->toString();
         }

@@ -30,7 +30,7 @@ Content-Type: application/json
 
 {
     "email": "test@test.pl",
-    "password": "test@test"
+    "password": "test@testddd23"
 }
 
 > {% client.global.set("auth_token", response.body.token); %}
@@ -43,8 +43,20 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "oldPassword": "test@test",
-    "newPassword": "test@test"
+    "oldPassword": "test@testddd23",
+    "newPassword": "test@testddd235"
+}
+
+###
+
+POST http://localhost:9501/api/users/a2e62e10-019a-4c6f-afcf-5bd9b5690747/change-password
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "oldPassword": "test@testddd23",
+    "newPassword": "test@testddd235"
 }
 
 ###

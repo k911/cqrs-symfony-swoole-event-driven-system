@@ -2,24 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\User\Event;
+namespace App\Application\Command;
 
-final class UserPasswordChanged
+final class ChangeUserPasswordCommand
 {
-    /**
-     * @var string
-     */
     private $id;
-
-    /**
-     * @var string
-     */
     private $newPasswordHash;
 
-    /**
-     * @param string $id
-     * @param string $newPasswordHash
-     */
     public function __construct(string $id, string $newPasswordHash)
     {
         $this->id = $id;
