@@ -20,7 +20,7 @@ class CreateUserCommand
     /**
      * @var string
      */
-    private $plainPassword;
+    private $passwordHash;
     /**
      * @var array
      */
@@ -29,27 +29,25 @@ class CreateUserCommand
     public function __construct(
         string $id,
         string $email,
-        string $plainPassword,
+        string $passwordHash,
         array $roles
     ) {
         Assertion::uuid($id);
         Assertion::email($email);
-        Assertion::notBlank($plainPassword, 'Password must be provided while creating a new user');
-        Assertion::minLength($plainPassword, 8, 'Password must be at least 8 characters long');
         Assertion::minCount($roles, 1, 'User must have at least one role');
 
         $this->id = $id;
         $this->email = $email;
-        $this->plainPassword = $plainPassword;
+        $this->passwordHash = $passwordHash;
         $this->roles = $roles;
     }
 
-    public static function fromUserDocument(UserDocument $document): self
+    public static function fromUserDocument(UserDocument $document, string $passwordHash): self
     {
         return new self(
             $document->id,
             $document->email,
-            $document->plainPassword,
+            $passwordHash,
             $document->roles
         );
     }
@@ -73,9 +71,9 @@ class CreateUserCommand
     /**
      * @return string
      */
-    public function getPlainPassword(): string
+    public function getPasswordHash(): string
     {
-        return $this->plainPassword;
+        return $this->passwordHash;
     }
 
     /**

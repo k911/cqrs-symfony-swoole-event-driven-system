@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User;
 
+use App\Domain\User\Event\UserCreated;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 
@@ -36,10 +37,12 @@ class User implements SymfonyUserInterface, UserInterface
      */
     private $passwordHash;
 
-    public function __construct(UserIdInterface $userId, UserEmail $userEmail)
+    public function __construct(UserIdInterface $userId, UserEmail $userEmail, string $passwordHash, array $roles)
     {
         $this->id = $userId;
         $this->email = $userEmail;
+        $this->passwordHash = $passwordHash;
+        $this->roles = $roles;
     }
 
     public function getId(): UserIdInterface
@@ -96,11 +99,11 @@ class User implements SymfonyUserInterface, UserInterface
     }
 
     /**
-     * @see UserInterface
+     * {@inheritdoc}
      */
-    public function getSalt(): void
+    public function getSalt(): ?string
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
     /**
@@ -108,7 +111,13 @@ class User implements SymfonyUserInterface, UserInterface
      */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+    }
+
+    public static function fromUserCreatedEvent(UserIdInterface $userId, UserCreated $event): self
+    {
+        return new self($userId,
+            new UserEmail($event->getEmail()),
+            $event->getPasswordHash(),
+            $event->getRoles());
     }
 }

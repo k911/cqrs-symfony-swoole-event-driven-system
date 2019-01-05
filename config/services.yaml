@@ -7,8 +7,8 @@ services:
         autoconfigure: true
         bind:
             $commandBus: '@messenger.bus.commands'
-#            $queryBus: '@messenger.bus.queries'
-#            $eventBus: '@messenger.bus.events'
+            $eventBus: '@messenger.bus.events'
+    #            $queryBus: '@messenger.bus.queries'
 
     App\:
         resource: '../src/*'
@@ -24,6 +24,12 @@ services:
 
     App\Domain\User\UserRepositoryInterface:
         class: App\Infrastructure\ORM\Repository\UserRepository
+
+    App\Infrastructure\ApiPlatform\ReferencingIriConverter:
+        decorates: 'api_platform.iri_converter'
+        arguments:
+            $resourceMetadataFactory: '@api_platform.metadata.resource.metadata_factory'
+            $decorated: '@App\Infrastructure\ApiPlatform\ReferencingIriConverter.inner'
 
     app.redis.session_handler:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler

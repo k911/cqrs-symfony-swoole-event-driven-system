@@ -5,42 +5,43 @@ declare(strict_types=1);
 namespace App\Application\Command\Handler;
 
 use App\Application\Command\CreateUserCommand;
+use App\Domain\User\Event\UserCreated;
 use App\Domain\User\User;
-use App\Domain\User\UserEmail;
 use App\Infrastructure\Uuid\RamseyUuidUserId;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class CreateUserHandler
 {
-    /**
-     * @var EntityManagerInterface
-     */
     private $entityManager;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
-    {
+    private $eventBus;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        MessageBusInterface $eventBus
+    ) {
         $this->entityManager = $entityManager;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->eventBus = $eventBus;
     }
 
     public function __invoke(CreateUserCommand $command): void
     {
-        dump($command);
-
-        $user = new User(
-            RamseyUuidUserId::fromString($command->getId()),
-            new UserEmail($command->getEmail())
+        $userCreatedEvent = new UserCreated(
+            $command->getId(),
+            $command->getEmail(),
+            $command->getPasswordHash(),
+            $command->getRoles()
         );
-        $user->setPassword($this->passwordEncoder->encodePassword(
-            $user, $command->getPlainPassword()
-        ));
-        $user->setRoles($command->getRoles());
 
-        $this->entityManager->persist($user);
+        $this->entityManager->transactional(function () use ($userCreatedEvent): void {
+            $userId = RamseyUuidUserId::fromString($userCreatedEvent->getId());
+            $this->entityManager->persist(User::fromUserCreatedEvent(
+                $userId,
+                $userCreatedEvent
+            ));
+        });
+
+        $this->eventBus->dispatch($userCreatedEvent);
     }
 }

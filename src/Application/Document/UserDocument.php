@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Application\Document;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
+use App\Application\Contract\IdentifiedDocumentInterface;
 use App\Domain\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserDocument
+final class UserDocument implements SymfonyUserInterface, IdentifiedDocumentInterface
 {
     /**
      * @ApiProperty(identifier=true)
@@ -38,9 +40,16 @@ final class UserDocument
     /**
      * @Groups({"UserWrite","UserUpdate"})
      *
-     * @var string
+     * @Assert\Length(min="8",minMessage="Password must be at least 8 characters long")
+     *
+     * @var string|null
      */
     public $plainPassword;
+
+    /**
+     * @var string|null
+     */
+    public $passwordHash;
 
     public function isGranted(object $user): bool
     {
@@ -67,5 +76,45 @@ final class UserDocument
         $document->roles = $source->getRoles();
 
         return $document;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPassword(): string
+    {
+        return $this->passwordHash;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsername(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function eraseCredentials(): void
+    {
+        $this->plainPassword = null;
     }
 }

@@ -29,16 +29,14 @@ class UserFixtures extends Fixture
     {
         $admin = new User(
             RamseyUuidUserId::fromUuid4(),
-            new UserEmail('super@admin.pl')
+            new UserEmail('super@admin.pl'),
+            '',
+            [
+                'ROLE_ADMIN',
+            ]
         );
-        $admin->setRoles([
-            'ROLE_ADMIN',
-        ]);
-        $admin->setPassword(
-            $this->passwordEncoder->encodePassword($admin, 'password')
-        );
+        $admin->setPassword($this->passwordEncoder->encodePassword($admin, 'password'));
         $manager->persist($admin);
-
         $manager->flush();
     }
 }

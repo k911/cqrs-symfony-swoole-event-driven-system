@@ -33,8 +33,18 @@ Content-Type: application/json
     "password": "test@test"
 }
 
-> {%
-client.global.set("auth_token", response.body.token);
-%}
+> {% client.global.set("auth_token", response.body.token); %}
+
+###
+
+POST http://localhost:9501/api/users/{{user_id}}/change-password
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "oldPassword": "test@test",
+    "newPassword": "test@test"
+}
 
 ###
