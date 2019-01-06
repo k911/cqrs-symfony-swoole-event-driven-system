@@ -23,8 +23,7 @@ final class CreateUserAction
         MessageBusInterface $commandBus,
         UserPasswordEncoderInterface $userPasswordEncoder,
         UserRepositoryInterface $userRepository
-    )
-    {
+    ) {
         $this->commandBus = $commandBus;
         $this->userPasswordEncoder = $userPasswordEncoder;
         $this->userRepository = $userRepository;

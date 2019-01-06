@@ -35,13 +35,12 @@ class CreateUserHandler
         );
 
         $this->entityManager->transactional(function () use ($userCreatedEvent): void {
-            $userId = RamseyUuidUserId::fromString($userCreatedEvent->getId());
             $this->entityManager->persist(User::fromUserCreatedEvent(
-                $userId,
+                RamseyUuidUserId::fromString($userCreatedEvent->getId()),
                 $userCreatedEvent
             ));
         });
-
+        $this->entityManager->clear();
         $this->eventBus->dispatch($userCreatedEvent);
     }
 }

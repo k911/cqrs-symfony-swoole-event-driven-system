@@ -47,7 +47,7 @@ class ChangeUserPasswordHandler
         $this->entityManager->transactional(function () use ($user, $event): void {
             $user->applyChangePassword($event);
         });
-
+        $this->entityManager->clear();
         $this->eventBus->dispatch($event);
     }
 }

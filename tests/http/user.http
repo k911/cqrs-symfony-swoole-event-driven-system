@@ -30,7 +30,7 @@ Content-Type: application/json
 
 {
     "email": "test@test.pl",
-    "password": "test@testddd23"
+    "password": "test@test23"
 }
 
 > {% client.global.set("auth_token", response.body.token); %}
@@ -43,8 +43,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "oldPassword": "test@testddd23",
-    "newPassword": "test@testddd235"
+    "oldPassword": "test@test234",
+    "newPassword": "test@test"
 }
 
 ###

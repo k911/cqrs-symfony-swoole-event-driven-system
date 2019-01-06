@@ -51,8 +51,8 @@ COPY --from=ext-amqp /usr/local/lib/php/extensions/no-debug-non-zts-20180731/amq
 COPY --from=ext-amqp /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini
 COPY --from=app-installer /usr/src/app ./
 RUN mv .env.docker .env && \
-    bin/console cache:clear && \
-    bin/console assets:install public --symlink --relative
+    bin/console cache:clear --env docker && \
+    bin/console assets:install public --symlink --relative --env docker
 
 FROM base as SymfonyConsole
 ENTRYPOINT ["php", "-d", "memory_limit=-1", "bin/console"]
