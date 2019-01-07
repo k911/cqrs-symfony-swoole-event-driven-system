@@ -1,0 +1,68 @@
+POST http://localhost/api/users
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "test@test.pl",
+    "plainPassword": "test@test",
+    "roles": [
+        "ROLE_USER",
+        "ROLE_TEST"
+    ]
+}
+
+> {% client.global.set("user_id", response.body.id); %}
+
+###
+
+GET http://localhost/api/users
+Authorization: Bearer {{auth_token}}
+Accept: application/ld+json
+
+###
+
+GET http://localhost/api/users?email=test@test.pl
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+
+GET http://localhost/api/user-events?user.email=test@test.pl&order[createdAt]=ASC
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+
+GET http://localhost/api/users/{{user_id}}
+Authorization: Bearer {{auth_token}}
+Accept: application/ld+json
+
+###
+
+###
+
+POST http://localhost/api/token
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "test@test.pl",
+    "password": "test@test"
+}
+
+> {% client.global.set("auth_token", response.body.token); %}
+
+###
+
+POST http://localhost/api/users/{{user_id}}/change-password
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "oldPassword": "test@test",
+    "newPassword": "test@test23"
+}
+
+###

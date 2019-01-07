@@ -13,6 +13,28 @@ services:
     ports:
       - "80:8080"
 
+  command-consumer:
+    image: app-command-consumer:local
+    command:
+      - messenger:consume-messages
+      - --bus=messenger.bus.commands
+      - commands
+    build:
+      context: .
+      target: SymfonyConsole
+    env_file: .env.docker
+
+  event-consumer:
+    image: app-event-consumer:local
+    command:
+      - messenger:consume-messages
+      - --bus=messenger.bus.events
+      - events
+    build:
+      context: .
+      target: SymfonyConsole
+    env_file: .env.docker
+
   mercure:
     image: dunglas/mercure
     environment:

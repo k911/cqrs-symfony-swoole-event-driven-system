@@ -1,0 +1,17 @@
+
+
+POST http://localhost/api/token
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "super@admin.pl",
+    "password": "password"
+}
+
+> {%
+client.global.set("auth_token", response.body.token);
+%}
+
+###
+
