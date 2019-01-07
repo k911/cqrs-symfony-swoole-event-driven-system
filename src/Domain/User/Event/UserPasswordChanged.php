@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Event;
 
-final class UserPasswordChanged
+final class UserPasswordChanged implements EventInterface
 {
     /**
      * @var string
      */
-    private $id;
+    private $userId;
 
     /**
      * @var string
@@ -17,21 +17,21 @@ final class UserPasswordChanged
     private $newPasswordHash;
 
     /**
-     * @param string $id
+     * @param string $userId
      * @param string $newPasswordHash
      */
-    public function __construct(string $id, string $newPasswordHash)
+    public function __construct(string $userId, string $newPasswordHash)
     {
-        $this->id = $id;
+        $this->userId = $userId;
         $this->newPasswordHash = $newPasswordHash;
     }
 
     /**
      * @return string
      */
-    public function getId(): string
+    public function getUserId(): string
     {
-        return $this->id;
+        return $this->userId;
     }
 
     /**
@@ -40,5 +40,10 @@ final class UserPasswordChanged
     public function getNewPasswordHash(): string
     {
         return $this->newPasswordHash;
+    }
+
+    public function getEventType(): string
+    {
+        return 'user_password_changed';
     }
 }

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Uuid;
 
-use App\Domain\User\UserIdInterface;
+use DateTime;
 use Ramsey\Uuid\Converter\NumberConverterInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-final class RamseyUuidUserId implements UuidInterface, UserIdInterface
+class DomainId implements UuidInterface
 {
     /**
      * @var UuidInterface
@@ -112,7 +112,7 @@ final class RamseyUuidUserId implements UuidInterface, UserIdInterface
     /**
      * {@inheritdoc}
      */
-    public function getDateTime(): \DateTime
+    public function getDateTime(): DateTime
     {
         return $this->uuid->getDateTime();
     }
@@ -200,7 +200,7 @@ final class RamseyUuidUserId implements UuidInterface, UserIdInterface
     /**
      * {@inheritdoc}
      */
-    public function getVersion()
+    public function getVersion(): ?int
     {
         return $this->uuid->getVersion();
     }
@@ -223,14 +223,14 @@ final class RamseyUuidUserId implements UuidInterface, UserIdInterface
         return $this->uuid->jsonSerialize();
     }
 
-    public static function fromString(string $uuid): self
+    public static function fromString(string $uuid)
     {
-        return new self(Uuid::fromString($uuid));
+        return new static(Uuid::fromString($uuid));
     }
 
-    public static function fromUuid4(): self
+    public static function fromUuid4()
     {
-        return new self(Uuid::uuid4());
+        return new static(Uuid::uuid4());
     }
 
     public function __toString(): string

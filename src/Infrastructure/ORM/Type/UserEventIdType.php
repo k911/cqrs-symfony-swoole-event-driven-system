@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ORM\Type;
 
-use App\Domain\User\UserId;
+use App\Domain\User\UserEventId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Ramsey\Uuid\Doctrine\UuidType;
 
-class UserIdType extends UuidType
+class UserEventIdType extends UuidType
 {
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return new UserId(parent::convertToPHPValue($value, $platform));
+        return new UserEventId(parent::convertToPHPValue($value, $platform));
     }
 
     /**
@@ -20,6 +20,6 @@ class UserIdType extends UuidType
      */
     public function getName(): string
     {
-        return 'user_id';
+        return 'user_event_id';
     }
 }

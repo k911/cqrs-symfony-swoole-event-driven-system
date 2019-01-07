@@ -7,8 +7,8 @@ namespace App\Application\Action;
 use App\Application\Command\CreateUserCommand;
 use App\Application\Document\UserDocument;
 use App\Domain\User\UserEmail;
+use App\Domain\User\UserId;
 use App\Domain\User\UserRepositoryInterface;
-use App\Infrastructure\Uuid\RamseyUuidUserId;
 use Assert\Assertion;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -34,7 +34,7 @@ final class CreateUserAction
         Assertion::null($this->userRepository->findByEmail(new UserEmail($data->email)), 'Could not create user.');
 
         if (null === $data->id) {
-            $data->id = RamseyUuidUserId::fromUuid4()->toString();
+            $data->id = UserId::fromUuid4()->toString();
         }
 
         Assertion::notBlank($data->plainPassword, 'Password must be provided while creating a new user');

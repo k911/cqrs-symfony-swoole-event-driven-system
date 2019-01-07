@@ -1,6 +1,39 @@
+App\Domain\User\User:
+  shortName: User
+  attributes:
+    normalization_context:
+      groups: ['UserRead']
+    denormalization_context:
+      groups: ['UserWrite']
+  collectionOperations:
+    get:
+      method: GET
+      access_control: "is_granted('ROLE_ADMIN')"
+  itemOperations:
+    get:
+      method: GET
+      access_control: "is_granted('ROLE_ADMIN') or (user and object.isGranted(user))"
+
+App\Domain\User\UserEventStore:
+  shortName: UserEvent
+  attributes:
+    normalization_context:
+      groups: ['UserEventRead']
+    denormalization_context:
+      groups: ['UserEventWrite']
+  collectionOperations:
+    get:
+      method: GET
+      access_control: "is_granted('ROLE_ADMIN')"
+  itemOperations:
+    get:
+      method: GET
+      access_control: "is_granted('ROLE_ADMIN') or (user and object.isGranted(user))"
+
 App\Application\Document\UserDocument:
   shortName: User
   attributes:
+    iri: api_users_get_item
     normalization_context:
       groups: ['UserRead']
     denormalization_context:
@@ -10,11 +43,7 @@ App\Application\Document\UserDocument:
       method: POST
       controller: App\Application\Action\CreateUserAction
       access_control: "is_granted('ROLE_ADMIN')"
-  itemOperations:
-    get:
-      method: GET
-      controller: App\Application\Action\GetUserAction
-      access_control: "is_granted('ROLE_ADMIN') or (user and object.isGranted(user))"
+  itemOperations: []
 
 App\Application\Document\UserChangePasswordDocument:
   shortName: User

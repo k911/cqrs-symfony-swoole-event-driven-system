@@ -16,6 +16,24 @@ Content-Type: application/json
 
 ###
 
+GET http://localhost:9501/api/users
+Authorization: Bearer {{auth_token}}
+Accept: application/ld+json
+
+###
+
+GET http://localhost:9501/api/users?email=test@test.pl
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+
+GET http://localhost:9501/api/user-events?user.email=test@test.pl&order[createdAt]=ASC
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+
 GET http://localhost:9501/api/users/{{user_id}}
 Authorization: Bearer {{auth_token}}
 Accept: application/ld+json
@@ -30,7 +48,7 @@ Content-Type: application/json
 
 {
     "email": "test@test.pl",
-    "password": "test@test23"
+    "password": "test@test"
 }
 
 > {% client.global.set("auth_token", response.body.token); %}
@@ -43,20 +61,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "oldPassword": "test@test234",
-    "newPassword": "test@test"
-}
-
-###
-
-POST http://localhost:9501/api/users/a2e62e10-019a-4c6f-afcf-5bd9b5690747/change-password
-Authorization: Bearer {{auth_token}}
-Accept: application/json
-Content-Type: application/json
-
-{
-    "oldPassword": "test@testddd23",
-    "newPassword": "test@testddd235"
+    "oldPassword": "test@test",
+    "newPassword": "test@test23"
 }
 
 ###

@@ -19,8 +19,9 @@ doctrine:
         types:
             user_id: 'App\Infrastructure\ORM\Type\UserIdType'
             user_email: 'App\Infrastructure\ORM\Type\UserEmailType'
+            user_event_id: 'App\Infrastructure\ORM\Type\UserEventIdType'
     orm:
-        auto_generate_proxy_classes: false
+        auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:

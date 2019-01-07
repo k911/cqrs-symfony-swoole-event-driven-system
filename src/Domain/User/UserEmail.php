@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Domain\User;
 
 use Assert\Assertion;
+use JsonSerializable;
+use Serializable;
 
-class UserEmail implements UserEmailInterface
+class UserEmail implements UserEmailInterface, Serializable, JsonSerializable
 {
     /**
      * @var string
@@ -32,5 +34,29 @@ class UserEmail implements UserEmailInterface
     public function __toString(): string
     {
         return $this->toString();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): string
+    {
+        return $this->toString();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized): void
+    {
+        $this->email = $serialized;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return $this->email;
     }
 }

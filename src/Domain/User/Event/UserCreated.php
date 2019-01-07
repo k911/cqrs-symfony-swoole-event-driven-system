@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Event;
 
-final class UserCreated
+final class UserCreated implements EventInterface
 {
     /**
      * @var string
      */
-    private $id;
+    private $userId;
 
     /**
      * @var string
@@ -27,14 +27,14 @@ final class UserCreated
     private $passwordHash;
 
     /**
-     * @param string   $id
+     * @param string   $userId
      * @param string   $email
      * @param string   $passwordHash
      * @param string[] $roles
      */
-    public function __construct(string $id, string $email, string $passwordHash, array $roles)
+    public function __construct(string $userId, string $email, string $passwordHash, array $roles)
     {
-        $this->id = $id;
+        $this->userId = $userId;
         $this->email = $email;
         $this->passwordHash = $passwordHash;
         $this->roles = $roles;
@@ -43,9 +43,9 @@ final class UserCreated
     /**
      * @return string
      */
-    public function getId(): string
+    public function getUserId(): string
     {
-        return $this->id;
+        return $this->userId;
     }
 
     /**
@@ -70,5 +70,10 @@ final class UserCreated
     public function getPasswordHash(): string
     {
         return $this->passwordHash;
+    }
+
+    public function getEventType(): string
+    {
+        return 'user_created';
     }
 }

@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace App\Domain\User;
 
-use App\Domain\User\Event\UserCreated;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\ORM\Repository\UserRepository")
+ * @ApiFilter(SearchFilter::class, properties={"id": "exact","email": "exact"})
  */
 class User implements SymfonyUserInterface, UserInterface
 {
     /**
      * @ORM\Id()
      * @ORM\Column(type="user_id")
+     * @Groups({"UserRead"})
      */
     private $id;
 
@@ -23,13 +27,16 @@ class User implements SymfonyUserInterface, UserInterface
      * @var UserEmail
      *
      * @ORM\Column(type="user_email", length=180, unique=true)
+     * @Groups({"UserRead"})
      */
     private $email;
 
     /**
+     * @var array
      * @ORM\Column(type="json")
+     * @Groups({"UserRead"})
      */
-    private $roles = [];
+    private $roles;
 
     /**
      * @var string The hashed password
@@ -37,7 +44,7 @@ class User implements SymfonyUserInterface, UserInterface
      */
     private $passwordHash;
 
-    public function __construct(UserIdInterface $userId, UserEmail $userEmail, string $passwordHash, array $roles)
+    public function __construct(UserId $userId, UserEmail $userEmail, string $passwordHash, array $roles)
     {
         $this->id = $userId;
         $this->email = $userEmail;
@@ -108,7 +115,16 @@ class User implements SymfonyUserInterface, UserInterface
     {
     }
 
-    public static function fromUserCreatedEvent(UserIdInterface $userId, UserCreated $event): self
+    public function isGranted(object $user): bool
+    {
+        if ($user instanceof UserInterface) {
+            return $this->id->equals($user->getId());
+        }
+
+        return false;
+    }
+
+    public static function fromEvent(UserId $userId, Event\UserCreated $event): self
     {
         return new self($userId,
             new UserEmail($event->getEmail()),

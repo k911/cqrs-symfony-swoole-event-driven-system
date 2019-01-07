@@ -6,8 +6,8 @@ namespace App\Application\Action;
 
 use App\Application\Command\ChangeUserPasswordCommand;
 use App\Application\Document\UserChangePasswordDocument;
+use App\Domain\User\UserId;
 use App\Domain\User\UserRepositoryInterface;
-use App\Infrastructure\Uuid\RamseyUuidUserId;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -36,7 +36,7 @@ final class ChangeUserPasswordAction
     public function __invoke(UserChangePasswordDocument $data): UserChangePasswordDocument
     {
         /** @var UserInterface|null $user */
-        $user = $this->userRepository->findById(RamseyUuidUserId::fromString($data->id));
+        $user = $this->userRepository->findById(UserId::fromString($data->id));
 
         if (null === $user) {
             throw new NotFoundHttpException(\sprintf('User with id "%s" has not been found.', $data->id));
