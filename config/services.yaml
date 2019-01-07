@@ -1,5 +1,13 @@
 parameters:
     env(REDIS_URI): ''
+    env(MERCURE_PUBLISH_URL): ''
+    env(MERCURE_JWT_SECRET): ''
+    env(ROUTER_CONTEXT_HOST): localhost:9501
+    env(ROUTER_CONTEXT_SCHEME): http
+    env(ROUTER_CONTEXT_BASE_URL): ''
+    router.request_context.host: '%env(ROUTER_CONTEXT_HOST)%'
+    router.request_context.scheme: '%env(ROUTER_CONTEXT_SCHEME)%'
+    router.request_context.base_url: '%env(ROUTER_CONTEXT_BASE_URL)%'
 
 services:
     _defaults:
@@ -18,12 +26,22 @@ services:
         resource: '../src/Application/Command/Handler'
         tags: [{ name: messenger.message_handler, bus: messenger.bus.commands }]
 
+    App\Application\EventHandler\:
+        resource: '../src/Application/EventHandler'
+        tags: [{ name: messenger.message_handler, bus: messenger.bus.events }]
+
     App\Application\Action\:
         resource: '../src/Application/Action'
         tags: [controller.service_arguments]
 
     App\Domain\User\UserRepositoryInterface:
         class: App\Infrastructure\ORM\Repository\UserRepository
+
+    App\Application\Contract\EventPublisherInterface:
+        class: App\Infrastructure\Mercure\EventPublisher
+
+    App\Application\Contract\UrlGeneratorInterface:
+        class: App\Infrastructure\UrlGenerator\RequestContextUrlGenerator
 
     App\Infrastructure\ApiPlatform\ReferencingIriConverter:
         decorates: 'api_platform.iri_converter'

@@ -1,15 +1,19 @@
 framework:
     messenger:
         transports:
-             amqp: '%env(MESSENGER_TRANSPORT_DSN)%'
+             commands: '%env(MESSENGER_TRANSPORT_DSN)%/commands'
+             events: '%env(MESSENGER_TRANSPORT_DSN)%/events'
 
         routing:
-             '*': amqp
+             'App\Application\Command\CreateUserCommand': commands
+             'App\Application\Command\ChangeUserPasswordCommand': commands
+
+             'App\Domain\User\Event\UserCreated': events
+             'App\Domain\User\Event\UserPasswordChanged': events
 
         default_bus: messenger.bus.commands
         buses:
             messenger.bus.commands:
-                default_middleware: allow_no_handlers
                 middleware:
                     - validation
             messenger.bus.events:

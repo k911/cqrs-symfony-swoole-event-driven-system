@@ -61,8 +61,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "oldPassword": "test@test",
-    "newPassword": "test@test23"
+    "oldPassword": "test@test23",
+    "newPassword": "test@test"
 }
 
 ###
