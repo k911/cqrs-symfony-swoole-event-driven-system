@@ -44,3 +44,18 @@ App\Application\Document\ReviewDocument:
       controller: App\Application\Action\CreateReviewAction
       access_control: "is_granted('ROLE_USER')"
   itemOperations: []
+
+App\Application\Document\ReviewChangeCommitDocument:
+  shortName: Review
+  attributes:
+    iri: api_reviews_get_item
+    normalization_context:
+      groups: ['ReviewChangeCommitRead']
+    denormalization_context:
+      groups: ['ReviewChangeCommitWrite']
+  collectionOperations: []
+  itemOperations:
+    change_commit:
+      method: POST
+      path: '/reviews/{id}/change-commit'
+      controller: App\Application\Action\ChangeReviewCommitAction

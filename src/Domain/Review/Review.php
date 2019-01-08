@@ -112,6 +112,10 @@ class Review
     {
         $eventClass = \get_class($event);
         switch ($eventClass) {
+            case Event\ReviewCommitChanged::class:
+                /* @var Event\ReviewCommitChanged $event */
+                $this->currentCommitHash = $event->getNewCommitHash();
+                break;
             case Event\ReviewCheckFinished::class:
                 /* @var Event\ReviewCheckFinished $event */
                 $this->addAutomatedCheck(new AutomatedCheck(

@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @ORM\Entity()
- * @ApiFilter(SearchFilter::class, properties={"id": "exact","user.email": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"id": "exact","user.email": "exact","review.id": "exact"})
  * @ApiFilter(OrderFilter::class, properties={"createdAt": "ASC"})
  */
 class ReviewEventStore

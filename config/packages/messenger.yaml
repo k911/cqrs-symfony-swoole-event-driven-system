@@ -14,7 +14,8 @@ framework:
              'App\Domain\User\Event\UserEmailChanged': events
              # Reviews
              'App\Application\Command\CreateReviewCommand': commands
-             'App\Application\Command\StartCheckCommand': commands
+             'App\Application\Command\StartReviewCheckCommand': commands
+             'App\Application\Command\ChangeReviewCommitCommand': commands
              'App\Domain\Review\Event\ReviewCreated': events
              'App\Domain\Review\Event\ReviewNeedsCheck': events
              'App\Domain\Review\Event\ReviewCheckFinished': events

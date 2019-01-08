@@ -5,7 +5,38 @@ Content-Type: application/json
 
 {
     "gitRepositoryUrl": "https://github.com/k911/swoole-bundle.git",
-    "currentCommitHash": "9713e619c13799f6a6ae552b23f4afed4e90b910"
+    "currentCommitHash": "c88fcf229e59edf8c2100b907a3dca0d14a78384"
+}
+
+> {% client.global.set("review_id", response.body.id); %}
+
+###
+
+GET http://localhost/api/reviews/{{review_id}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+
+GET http://localhost/api/review-events
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+
+GET http://localhost/api/review-events?review.id={{review_id}}&order[createdAt]=ASC
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+
+POST http://localhost/api/reviews/{{review_id}}/change-commit
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "newCommitHash": "9713e619c13799f6a6ae552b23f4afed4e90b910"
 }
 
 ###

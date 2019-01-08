@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Application\EventHandler;
 
 use App\Application\Contract\EventPublisherInterface;
-use App\Domain\Review\Event\ReviewCreated;
+use App\Domain\Review\Event\ReviewCommitChanged;
 use App\Domain\Review\Event\ReviewNeedsCheck;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class ReviewCreatedHandler
+final class ReviewCommitChangedHandler
 {
     private $eventPublisher;
     private $eventBus;
@@ -20,13 +20,13 @@ final class ReviewCreatedHandler
         $this->eventBus = $eventBus;
     }
 
-    public function __invoke(ReviewCreated $reviewCreated): void
+    public function __invoke(ReviewCommitChanged $reviewCreated): void
     {
         $this->eventPublisher->publish('/api/reviews', $reviewCreated->getReviewId(), $reviewCreated);
 
         $this->eventBus->dispatch(new ReviewNeedsCheck(
                 $reviewCreated->getReviewId(),
-                $reviewCreated->getCommitHash())
+                $reviewCreated->getNewCommitHash())
         );
     }
 }

@@ -75,6 +75,11 @@ class User implements SymfonyUserInterface, UserInterface
         return $this->email->toString();
     }
 
+    public function isAdmin(): bool
+    {
+        return \in_array('ROLE_ADMIN', $this->getRoles(), true);
+    }
+
     /**
      * {@inheritdoc}
      */

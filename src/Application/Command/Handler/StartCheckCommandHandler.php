@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Command\Handler;
 
-use App\Application\Command\StartCheckCommand;
+use App\Application\Command\StartReviewCheckCommand;
 use App\Application\Contract\GitRepository;
 use App\Application\Contract\GitRepositoryManagerInterface;
 use App\Domain\Review\AutomatedCheck;
@@ -23,7 +23,7 @@ class StartCheckCommandHandler
         $this->eventBus = $eventBus;
     }
 
-    private function handle(StartCheckCommand $command, GitRepository $repository): array
+    private function handle(StartReviewCheckCommand $command, GitRepository $repository): array
     {
         try {
             $this->gitRepositoryManager->checkoutCommit($repository, $command->getCommitHash());
@@ -73,7 +73,7 @@ class StartCheckCommandHandler
         }
     }
 
-    public function __invoke(StartCheckCommand $command): void
+    public function __invoke(StartReviewCheckCommand $command): void
     {
         $name = \bin2hex(\random_bytes(12));
         $repo = null;
@@ -112,7 +112,7 @@ class StartCheckCommandHandler
         }
     }
 
-    private function finishHandling(StartCheckCommand $command, bool $passed, array $result): void
+    private function finishHandling(StartReviewCheckCommand $command, bool $passed, array $result): void
     {
         $checkFinished = new ReviewCheckFinished(
             $command->getReviewId(),

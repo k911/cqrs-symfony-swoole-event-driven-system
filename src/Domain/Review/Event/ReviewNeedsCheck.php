@@ -14,26 +14,12 @@ class ReviewNeedsCheck implements EventInterface
     /**
      * @var string
      */
-    private $gitRepositoryUrl;
-
-    /**
-     * @var string
-     */
     private $commitHash;
 
-    public function __construct(string $reviewId, string $gitRepositoryUrl, string $commitHash)
+    public function __construct(string $reviewId, string $commitHash)
     {
         $this->reviewId = $reviewId;
-        $this->gitRepositoryUrl = $gitRepositoryUrl;
         $this->commitHash = $commitHash;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGitRepositoryUrl(): string
-    {
-        return $this->gitRepositoryUrl;
     }
 
     /**
