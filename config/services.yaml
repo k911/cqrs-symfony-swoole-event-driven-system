@@ -37,6 +37,9 @@ services:
     App\Domain\User\UserRepositoryInterface:
         class: App\Infrastructure\ORM\Repository\UserRepository
 
+    App\Domain\Review\ReviewRepositoryInterface:
+        class: App\Infrastructure\ORM\Repository\ReviewRepository
+
     App\Application\Contract\EventPublisherInterface:
         class: App\Infrastructure\Mercure\EventPublisher
 

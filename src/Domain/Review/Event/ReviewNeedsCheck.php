@@ -4,17 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Review\Event;
 
-class ReviewCreated implements EventInterface
+class ReviewNeedsCheck implements EventInterface
 {
-    /**
-     * @var string
-     */
     private $reviewId;
-
-    /**
-     * @var string
-     */
-    private $userId;
 
     /**
      * @var string
@@ -26,26 +18,11 @@ class ReviewCreated implements EventInterface
      */
     private $currentCommitHash;
 
-    /**
-     * @param string $reviewId
-     * @param string $userId
-     * @param string $gitRepositoryUrl
-     * @param string $currentCommitHash
-     */
-    public function __construct(string $reviewId, string $userId, string $gitRepositoryUrl, string $currentCommitHash)
+    public function __construct(string $reviewId, string $gitRepositoryUrl, string $currentCommitHash)
     {
         $this->reviewId = $reviewId;
-        $this->userId = $userId;
         $this->gitRepositoryUrl = $gitRepositoryUrl;
         $this->currentCommitHash = $currentCommitHash;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserId(): string
-    {
-        return $this->userId;
     }
 
     /**
@@ -71,6 +48,6 @@ class ReviewCreated implements EventInterface
 
     public function getEventType(): string
     {
-        return 'review_created';
+        return 'review_needs_check';
     }
 }

@@ -71,9 +71,9 @@ class Review
 
     /**
      * @param ReviewId $id
-     * @param string $gitRepositoryUrl
-     * @param string $currentCommitHash
-     * @param User $user
+     * @param string   $gitRepositoryUrl
+     * @param string   $currentCommitHash
+     * @param User     $user
      */
     public function __construct(ReviewId $id, string $gitRepositoryUrl, string $currentCommitHash, User $user)
     {

@@ -9,6 +9,7 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 /**
  * @DiscriminatorMap(typeProperty="eventType", mapping={
  *    "review_created"=ReviewCreated::class,
+ *    "review_needs_check"=ReviewNeedsCheck::class,
  * })
  */
 interface EventInterface
