@@ -5,13 +5,16 @@ framework:
              events: '%env(MESSENGER_TRANSPORT_DSN)%/events'
 
         routing:
+             # Users
              'App\Application\Command\CreateUserCommand': commands
              'App\Application\Command\ChangeUserPasswordCommand': commands
              'App\Application\Command\ChangeUserEmailCommand': commands
-
              'App\Domain\User\Event\UserCreated': events
              'App\Domain\User\Event\UserPasswordChanged': events
              'App\Domain\User\Event\UserEmailChanged': events
+             # Reviews
+             'App\Application\Command\CreateReviewCommand': commands
+             'App\Domain\Review\Event\ReviewCreated': events
 
         default_bus: messenger.bus.commands
         buses:

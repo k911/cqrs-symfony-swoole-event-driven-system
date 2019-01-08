@@ -20,6 +20,8 @@ doctrine:
             user_id: 'App\Infrastructure\ORM\Type\UserIdType'
             user_email: 'App\Infrastructure\ORM\Type\UserEmailType'
             user_event_id: 'App\Infrastructure\ORM\Type\UserEventIdType'
+            review_id: 'App\Infrastructure\ORM\Type\ReviewIdType'
+            review_event_id: 'App\Infrastructure\ORM\Type\ReviewEventIdType'
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
@@ -31,6 +33,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Domain/User'
                 prefix: 'App\Domain\User'
                 alias: AppUser
+            AppReview:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Domain/Review'
+                prefix: 'App\Domain\Review'
+                alias: AppReview
         metadata_cache_driver:
             type: service
             id: doctrine.system_cache_provider

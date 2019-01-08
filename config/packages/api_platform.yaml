@@ -3,6 +3,7 @@ api_platform:
         paths:
             - '%kernel.project_dir%/src/Application/Document'
             - '%kernel.project_dir%/src/Domain/User'
+            - '%kernel.project_dir%/src/Domain/Review'
             - '%kernel.project_dir%/config/packages/api_platform_resources'
 
     formats:

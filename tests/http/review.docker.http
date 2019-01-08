@@ -1,0 +1,11 @@
+POST http://localhost/api/reviews
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "gitRepositoryUrl": "https://github.com/k911/swoole-bundle.git",
+    "currentCommitHash": "9713e619c13799f6a6ae552b23f4afed4e90b910"
+}
+
+###

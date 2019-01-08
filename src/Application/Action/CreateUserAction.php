@@ -37,7 +37,6 @@ final class CreateUserAction
             $data->id = UserId::fromUuid4()->toString();
         }
 
-        Assertion::notBlank($data->plainPassword, 'Password must be provided while creating a new user');
         $this->commandBus->dispatch(CreateUserCommand::fromUserDocument(
             $data,
             $this->userPasswordEncoder->encodePassword($data, $data->plainPassword)

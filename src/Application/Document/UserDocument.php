@@ -15,7 +15,7 @@ final class UserDocument implements SymfonyUserInterface, IdentifiedDocumentInte
 {
     /**
      * @ApiProperty(identifier=true)
-     * @Groups({"UserRead","UserUpdate"})
+     * @Groups({"UserRead","UserWrite"})
      * @Assert\Uuid()
      *
      * @var string
@@ -23,23 +23,25 @@ final class UserDocument implements SymfonyUserInterface, IdentifiedDocumentInte
     public $id;
 
     /**
-     * @Groups({"UserRead","UserWrite","UserUpdate"})
+     * @Groups({"UserRead","UserWrite"})
      * @Assert\Email()
+     * @Assert\NotBlank()
      *
      * @var string
      */
     public $email;
 
     /**
-     * @Groups({"UserRead","UserWrite","UserUpdate"})
+     * @Groups({"UserRead","UserWrite"})
      *
      * @var string[]
      */
     public $roles;
 
     /**
-     * @Groups({"UserWrite","UserUpdate"})
+     * @Groups({"UserWrite"})
      *
+     * @Assert\NotBlank()
      * @Assert\Length(min="8",minMessage="Password must be at least 8 characters long")
      *
      * @var string|null
