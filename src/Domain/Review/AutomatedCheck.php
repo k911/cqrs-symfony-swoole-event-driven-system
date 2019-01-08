@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Domain\Review;
 
 use Assert\Assertion;
+use JsonSerializable;
 
-final class AutomatedCheck
+final class AutomatedCheck implements JsonSerializable
 {
     public const CHECK_NAME_PHPSTAN = 'PHPStan';
     public const CHECK_NAME_PHPCSFIXER = 'PHP-CS-Fixer';
@@ -34,21 +35,21 @@ final class AutomatedCheck
     /**
      * @var bool
      */
-    private $passed;
+    private $succeeded;
 
     /**
      * @param string $name
      * @param string $commitHash
      * @param array  $data
-     * @param bool   $passed
+     * @param bool   $succeeded
      */
-    public function __construct(string $name, string $commitHash, array $data, bool $passed)
+    public function __construct(string $name, string $commitHash, array $data, bool $succeeded)
     {
         Assertion::inArray($name, self::VALID_CHECK_NAMES);
         $this->name = $name;
         $this->commitHash = $commitHash;
         $this->data = $data;
-        $this->passed = $passed;
+        $this->succeeded = $succeeded;
     }
 
     /**
@@ -78,8 +79,31 @@ final class AutomatedCheck
     /**
      * @return bool
      */
-    public function isPassed(): bool
+    public function hasSucceeded(): bool
     {
-        return $this->passed;
+        return $this->succeeded;
+    }
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['name'],
+            $data['commitHash'],
+            $data['data'],
+            $data['succeeded']
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'name' => $this->name,
+            'commitHash' => $this->commitHash,
+            'data' => $this->data,
+            'succeeded' => $this->succeeded,
+        ];
     }
 }

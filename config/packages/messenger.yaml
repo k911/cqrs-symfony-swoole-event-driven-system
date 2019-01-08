@@ -18,6 +18,7 @@ framework:
              'App\Domain\Review\Event\ReviewCreated': events
              'App\Domain\Review\Event\ReviewNeedsCheck': events
              'App\Domain\Review\Event\ReviewCheckFinished': events
+             'App\Domain\Review\Event\ReviewAutomatedChecksStatusChanged': events
 
         default_bus: messenger.bus.commands
         buses:
