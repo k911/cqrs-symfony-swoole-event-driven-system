@@ -66,3 +66,13 @@ Content-Type: application/json
 }
 
 ###
+
+POST http://localhost:9501/api/users/{{user_id}}/change-email
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "password": "test@test23",
+    "newEmail": "test@testing.pl"
+}

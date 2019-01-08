@@ -9,6 +9,7 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 /**
  * @DiscriminatorMap(typeProperty="eventType", mapping={
  *    "user_created"=UserCreated::class,
+ *    "user_email_changed"=UserEmailChanged::class,
  *    "user_password_changed"=UserPasswordChanged::class
  * })
  */

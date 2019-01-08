@@ -20,8 +20,7 @@ final class EventPublisher implements EventPublisherInterface
         Publisher $publisher,
         SerializerInterface $serializer,
         UrlGeneratorInterface $urlGenerator
-    )
-    {
+    ) {
         $this->publisher = $publisher;
         $this->serializer = $serializer;
         $this->urlGenerator = $urlGenerator;

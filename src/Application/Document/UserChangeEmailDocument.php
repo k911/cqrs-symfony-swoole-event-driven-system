@@ -10,11 +10,11 @@ use App\Domain\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UserChangePasswordDocument implements IdentifiedDocumentInterface
+final class UserChangeEmailDocument implements IdentifiedDocumentInterface
 {
     /**
      * @ApiProperty(identifier=true)
-     * @Groups({"UserChangePasswordWrite","UserChangePasswordRead"})
+     * @Groups({"UserChangeEmailWrite","UserChangeEmailRead"})
      * @Assert\Uuid()
      *
      * @var string
@@ -22,22 +22,22 @@ final class UserChangePasswordDocument implements IdentifiedDocumentInterface
     public $id;
 
     /**
-     * @Groups({"UserChangePasswordWrite"})
+     * @Groups({"UserChangeEmailWrite"})
      * @Assert\NotBlank()
      *
      * @var string
      */
-    public $oldPassword;
+    public $password;
 
     /**
-     * @Groups({"UserChangePasswordWrite"})
+     * @Groups({"UserChangeEmailWrite"})
      *
      * @var string
      *
      * @Assert\NotBlank()
-     * @Assert\Length(min="8",minMessage="Password must be at least 8 characters long")
+     * @Assert\Email()
      */
-    public $newPassword;
+    public $newEmail;
 
     public function isGranted(object $user): bool
     {

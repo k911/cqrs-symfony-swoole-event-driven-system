@@ -7,9 +7,11 @@ framework:
         routing:
              'App\Application\Command\CreateUserCommand': commands
              'App\Application\Command\ChangeUserPasswordCommand': commands
+             'App\Application\Command\ChangeUserEmailCommand': commands
 
              'App\Domain\User\Event\UserCreated': events
              'App\Domain\User\Event\UserPasswordChanged': events
+             'App\Domain\User\Event\UserEmailChanged': events
 
         default_bus: messenger.bus.commands
         buses:

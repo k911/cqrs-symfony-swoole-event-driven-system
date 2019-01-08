@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\EventHandler;
@@ -18,9 +19,8 @@ final class UserPasswordChangedHandler
         $this->eventPublisher = $eventPublisher;
     }
 
-    public function __invoke(UserPasswordChanged $userPasswordChanged)
+    public function __invoke(UserPasswordChanged $userPasswordChanged): void
     {
         $this->eventPublisher->publish('/api/users', $userPasswordChanged->getUserId(), $userPasswordChanged);
     }
-
 }

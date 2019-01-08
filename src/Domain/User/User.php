@@ -124,15 +124,20 @@ class User implements SymfonyUserInterface, UserInterface
         return false;
     }
 
-    public static function fromEvent(UserId $userId, Event\UserCreated $event): self
+    public static function fromEvent(Event\UserCreated $event): self
     {
-        return new self($userId,
+        return new self(UserId::fromString($event->getUserId()),
             new UserEmail($event->getEmail()),
             $event->getPasswordHash(),
             $event->getRoles());
     }
 
-    public function applyChangePassword(Event\UserPasswordChanged $event): void
+    public function changeEmail(Event\UserEmailChanged $event): void
+    {
+        $this->email = new UserEmail($event->getNewEmail());
+    }
+
+    public function changePassword(Event\UserPasswordChanged $event): void
     {
         $this->passwordHash = $event->getNewPasswordHash();
     }

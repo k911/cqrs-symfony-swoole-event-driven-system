@@ -11,19 +11,13 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Mercure\Publisher;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class TestMercureCommand extends Command
 {
     protected static $defaultName = 'test:mercure';
-    /**
-     * @var Publisher
-     */
+
     private $publisher;
-    /**
-     * @var SerializerInterface
-     */
     private $serializer;
 
     public function __construct(EventPublisherInterface $publisher, SerializerInterface $serializer)

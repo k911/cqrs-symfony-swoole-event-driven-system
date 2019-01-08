@@ -8,6 +8,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Domain\User\Event\EventInterface;
+use Assert\Assertion;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -45,7 +46,7 @@ class UserEventStore
     private $createdAt;
 
     /**
-     * @var string
+     * @var array
      * @ORM\Column(type="json")
      * @Groups({"UserEventRead"})
      */
@@ -130,6 +131,7 @@ class UserEventStore
     public static function fromEvent(EventInterface $event, User $user, NormalizerInterface $normalizer): self
     {
         $data = $normalizer->normalize($event, 'json');
+        Assertion::isArray($data);
         $type = $data['eventType'];
         unset($data['eventType'], $data['userId']);
 

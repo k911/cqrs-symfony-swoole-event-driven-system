@@ -8,7 +8,7 @@ use Assert\Assertion;
 use JsonSerializable;
 use Serializable;
 
-class UserEmail implements UserEmailInterface, Serializable, JsonSerializable
+final class UserEmail implements UserEmailInterface, Serializable, JsonSerializable
 {
     /**
      * @var string

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Application\EventHandler;
 
 use App\Application\Contract\EventPublisherInterface;
-use App\Domain\User\Event\UserCreated;
+use App\Domain\User\Event\UserEmailChanged;
 
-final class UserCreatedHandler
+final class UserEmailChangedHandler
 {
     /**
      * @var EventPublisherInterface
@@ -19,8 +19,8 @@ final class UserCreatedHandler
         $this->eventPublisher = $eventPublisher;
     }
 
-    public function __invoke(UserCreated $userCreated): void
+    public function __invoke(UserEmailChanged $userEmailChanged): void
     {
-        $this->eventPublisher->publish('/api/users', $userCreated->getUserId(), $userCreated);
+        $this->eventPublisher->publish('/api/users', $userEmailChanged->getUserId(), $userEmailChanged);
     }
 }
