@@ -14,8 +14,10 @@ framework:
              'App\Domain\User\Event\UserEmailChanged': events
              # Reviews
              'App\Application\Command\CreateReviewCommand': commands
+             'App\Application\Command\StartCheckCommand': commands
              'App\Domain\Review\Event\ReviewCreated': events
              'App\Domain\Review\Event\ReviewNeedsCheck': events
+             'App\Domain\Review\Event\ReviewCheckFinished': events
 
         default_bus: messenger.bus.commands
         buses:

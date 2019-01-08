@@ -6,6 +6,7 @@ namespace App\Domain\Review;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Domain\Review\Event\EventInterface;
 use App\Domain\User\User;
 use App\Domain\User\UserInterface;
 use Assert\Assertion;
@@ -28,7 +29,7 @@ class Review
     /**
      * @var ReviewId
      * @ORM\Id()
-     * @ORM\Column(type="user_id")
+     * @ORM\Column(type="review_id")
      * @Groups({"ReviewRead"})
      */
     private $id;
@@ -86,15 +87,27 @@ class Review
         $this->currentCommitHash = $currentCommitHash;
         $this->user = $user;
 
-        $this->status = self::STATUS_OPEN;
+        $this->changeStatus(self::STATUS_OPEN);
         $this->automatedChecks = [];
+    }
+
+    public function apply(EventInterface $event): void
+    {
+        $eventClass = \get_class($event);
+        switch ($eventClass) {
+            case Event\ReviewNeedsCheck::class:
+                $this->automatedChecks = [];
+                break;
+            default:
+                throw new \InvalidArgumentException(\sprintf('Event %s has no handler', $eventClass));
+        }
     }
 
     public static function fromEvent(Event\ReviewCreated $event, User $user): self
     {
         return new self(ReviewId::fromString($event->getReviewId()),
             $event->getGitRepositoryUrl(),
-            $event->getCurrentCommitHash(),
+            $event->getCommitHash(),
             $user
         );
     }
@@ -138,6 +151,12 @@ class Review
     public function getAutomatedChecks(): array
     {
         return $this->automatedChecks;
+    }
+
+    private function changeStatus(string $status): void
+    {
+        Assertion::inArray($status, self::VALID_STATUSES);
+        $this->status = $status;
     }
 
     /**

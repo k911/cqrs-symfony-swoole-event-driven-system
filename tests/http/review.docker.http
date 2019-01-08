@@ -9,3 +9,34 @@ Content-Type: application/json
 }
 
 ###
+
+POST http://localhost/api/reviews
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "gitRepositoryUrl": "https://github.com/knit-pk/api-v1-php.git",
+    "currentCommitHash": "dsa"
+}
+
+###
+
+POST http://localhost/api/reviews
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "gitRepositoryUrl": "https://github.com/knit-pk/api-v1-php.git",
+    "currentCommitHash": "db91bad05129c140dff2dc153281bcbf8b69cf34"
+}
+
+###
+
+GET http://localhost/api/reviews
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+###

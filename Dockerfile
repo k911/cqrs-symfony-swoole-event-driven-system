@@ -22,9 +22,13 @@ ARG AMQP_VERSION=1.9.4
 RUN pecl install amqp-$AMQP_VERSION && \
     docker-php-ext-enable amqp
 
-FROM composer:latest as app-installer
-WORKDIR /usr/src/app
+FROM composer:latest as composer-installer
+ENV COMPOSER_HOME="/root/.composer" \
+    COMPOSER_ALLOW_SUPERUSER=1
 RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative --ansi
+
+FROM composer-installer as app-installer
+WORKDIR /usr/src/app
 COPY composer.json composer.lock symfony.lock ./
 RUN composer validate
 ARG COMPOSER_ARGS=install
@@ -32,7 +36,7 @@ RUN composer "$COMPOSER_ARGS" --prefer-dist --ignore-platform-reqs --no-progress
 COPY . ./
 RUN composer dump-autoload --classmap-authoritative --ansi
 
-FROM php:$PHP_TAG as base
+FROM php:$PHP_TAG as base-no-source
 RUN apk add --no-cache libaio libstdc++ zip openssl tzdata rabbitmq-c
 WORKDIR /usr/src/app
 
@@ -49,6 +53,8 @@ COPY --from=ext-pdo-mysql /usr/local/lib/php/extensions/no-debug-non-zts-2018073
 COPY --from=ext-pdo-mysql /usr/local/etc/php/conf.d/docker-php-ext-pdo_mysql.ini /usr/local/etc/php/conf.d/docker-php-ext-pdo_mysql.ini
 COPY --from=ext-amqp /usr/local/lib/php/extensions/no-debug-non-zts-20180731/amqp.so /usr/local/lib/php/extensions/no-debug-non-zts-20180731/amqp.so
 COPY --from=ext-amqp /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini
+
+FROM base-no-source as base
 COPY --from=app-installer /usr/src/app ./
 RUN mv .env.docker .env && \
     bin/console cache:clear --env docker && \
@@ -58,11 +64,26 @@ FROM base as SymfonyConsole
 ENTRYPOINT ["php", "-d", "memory_limit=-1", "bin/console"]
 CMD ["list"]
 
-FROM base as Composer
+FROM base-no-source as WorkerSymfonyConsole
+RUN apk add --no-cache git
 ENV COMPOSER_ALLOW_SUPERUSER=1
-COPY --from=app-installer /usr/bin/composer /usr/local/bin/composer
-ENTRYPOINT ["composer"]
+COPY --from=composer-installer /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer-installer /root/.composer /root/.composer
+RUN composer global require "phpstan/phpstan" "friendsofphp/php-cs-fixer" \
+    --prefer-dist --no-progress --no-suggest --classmap-authoritative --ansi
+COPY --from=app-installer /usr/src/app ./
+RUN mv .env.docker .env && \
+    bin/console cache:clear --env docker && \
+    bin/console assets:install public --symlink --relative --env docker
+
+ENTRYPOINT ["php", "-d", "memory_limit=-1", "bin/console"]
 CMD ["list"]
+
+#FROM base as Composer
+#ENV COMPOSER_ALLOW_SUPERUSER=1
+#COPY --from=composer-installer /usr/bin/composer /usr/local/bin/composer
+#ENTRYPOINT ["composer"]
+#CMD ["list"]
 
 #HEALTHCHECK --interval=5s --timeout=1s --start-period=1m \
 #  CMD curl --fail http://${HOST}:${PORT}/status || exit 1

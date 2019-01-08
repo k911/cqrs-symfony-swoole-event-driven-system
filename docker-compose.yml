@@ -21,7 +21,7 @@ services:
       - commands
     build:
       context: .
-      target: SymfonyConsole
+      target: WorkerSymfonyConsole
     env_file: .env.docker
 
   event-consumer:
@@ -47,27 +47,27 @@ services:
     ports:
       - "3333:3333"
 
-  console:
-    image: app-console:local
-    build:
-      context: .
-      target: SymfonyConsole
-    env_file: .env.docker
-    volumes:
-      - './public:/usr/src/app/public:ro'
-      - './src:/usr/src/app/src:ro'
-      - './config:/usr/src/app/config:ro'
+#  console:
+#    image: app-console:local
+#    build:
+#      context: .
+#      target: SymfonyConsole
+#    env_file: .env.docker
+#    volumes:
+#      - './public:/usr/src/app/public:ro'
+#      - './src:/usr/src/app/src:ro'
+#      - './config:/usr/src/app/config:ro'
 
-  composer:
-    image: app-composer:local
-    build:
-      context: .
-      target: Composer
-    env_file: .env.docker
-    volumes:
-      - './public:/usr/src/app/public:ro'
-      - './src:/usr/src/app/src:ro'
-      - './config:/usr/src/app/config:ro'
+#  composer:
+#    image: app-composer:local
+#    build:
+#      context: .
+#      target: Composer
+#    env_file: .env.docker
+#    volumes:
+#      - './public:/usr/src/app/public:ro'
+#      - './src:/usr/src/app/src:ro'
+#      - './config:/usr/src/app/config:ro'
 
   redis:
     image: redis:5-alpine

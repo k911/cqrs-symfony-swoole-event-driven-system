@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Review\Event;
+namespace App\Application\Command;
 
-class ReviewNeedsCheck implements EventInterface
+class StartCheckCommand
 {
     /**
      * @var string
@@ -20,12 +20,22 @@ class ReviewNeedsCheck implements EventInterface
      * @var string
      */
     private $commitHash;
+    /**
+     * @var string
+     */
+    private $checkName;
 
-    public function __construct(string $reviewId, string $gitRepositoryUrl, string $commitHash)
+    public function __construct(string $reviewId, string $checkName, string $gitRepositoryUrl, string $commitHash)
     {
         $this->reviewId = $reviewId;
         $this->gitRepositoryUrl = $gitRepositoryUrl;
         $this->commitHash = $commitHash;
+        $this->checkName = $checkName;
+    }
+
+    public function getCheckName(): string
+    {
+        return $this->checkName;
     }
 
     /**
@@ -47,10 +57,5 @@ class ReviewNeedsCheck implements EventInterface
     public function getReviewId(): string
     {
         return $this->reviewId;
-    }
-
-    public function getEventType(): string
-    {
-        return 'review_needs_check';
     }
 }

@@ -8,12 +8,14 @@ parameters:
     router.request_context.host: '%env(ROUTER_CONTEXT_HOST)%'
     router.request_context.scheme: '%env(ROUTER_CONTEXT_SCHEME)%'
     router.request_context.base_url: '%env(ROUTER_CONTEXT_BASE_URL)%'
+    git.cloner.path: '%kernel.project_dir%/var/git-clones'
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
         bind:
+            string $gitClonerPath: '%git.cloner.path%'
             $commandBus: '@messenger.bus.commands'
             $eventBus: '@messenger.bus.events'
     #            $queryBus: '@messenger.bus.queries'
@@ -45,6 +47,9 @@ services:
 
     App\Application\Contract\UrlGeneratorInterface:
         class: App\Infrastructure\UrlGenerator\RequestContextUrlGenerator
+
+    App\Application\Contract\GitRepositoryManagerInterface:
+        class: App\Infrastructure\Git\CliGitRepositoryManager
 
     App\Infrastructure\ApiPlatform\ReferencingIriConverter:
         decorates: 'api_platform.iri_converter'

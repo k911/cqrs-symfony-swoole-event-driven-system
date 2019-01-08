@@ -24,20 +24,20 @@ class ReviewCreated implements EventInterface
     /**
      * @var string
      */
-    private $currentCommitHash;
+    private $commitHash;
 
     /**
      * @param string $reviewId
      * @param string $userId
      * @param string $gitRepositoryUrl
-     * @param string $currentCommitHash
+     * @param string $commitHash
      */
-    public function __construct(string $reviewId, string $userId, string $gitRepositoryUrl, string $currentCommitHash)
+    public function __construct(string $reviewId, string $userId, string $gitRepositoryUrl, string $commitHash)
     {
         $this->reviewId = $reviewId;
         $this->userId = $userId;
         $this->gitRepositoryUrl = $gitRepositoryUrl;
-        $this->currentCommitHash = $currentCommitHash;
+        $this->commitHash = $commitHash;
     }
 
     /**
@@ -59,9 +59,9 @@ class ReviewCreated implements EventInterface
     /**
      * @return string
      */
-    public function getCurrentCommitHash(): string
+    public function getCommitHash(): string
     {
-        return $this->currentCommitHash;
+        return $this->commitHash;
     }
 
     public function getReviewId(): string
