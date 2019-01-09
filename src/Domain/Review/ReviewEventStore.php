@@ -4,22 +4,16 @@ declare(strict_types=1);
 
 namespace App\Domain\Review;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Domain\Review\Event\EventInterface;
 use App\Domain\User\UserInterface;
 use Assert\Assertion;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @ORM\Entity()
- * @ApiFilter(SearchFilter::class, properties={"id": "exact","user.email": "exact","review.id": "exact"})
- * @ApiFilter(OrderFilter::class, properties={"createdAt": "ASC"})
  */
 class ReviewEventStore
 {
@@ -27,7 +21,6 @@ class ReviewEventStore
      * @var ReviewEventId
      * @ORM\Id()
      * @ORM\Column(type="review_event_id")
-     * @Groups({"ReviewEventRead"})
      */
     private $id;
 
@@ -35,28 +28,24 @@ class ReviewEventStore
      * @var Review
      * @ORM\ManyToOne(targetEntity="Review")
      * @ORM\JoinColumn(name="review_id",referencedColumnName="id")
-     * @Groups({"ReviewEventRead"})
      */
     private $review;
 
     /**
      * @var DateTimeImmutable
      * @ORM\Column(type="datetime_immutable")
-     * @Groups({"ReviewEventRead"})
      */
     private $createdAt;
 
     /**
      * @var array
      * @ORM\Column(type="json")
-     * @Groups({"ReviewEventRead"})
      */
     private $eventData;
 
     /**
      * @var string
      * @ORM\Column(type="string")
-     * @Groups({"ReviewEventRead"})
      */
     private $eventType;
 

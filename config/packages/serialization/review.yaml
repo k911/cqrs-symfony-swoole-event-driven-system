@@ -1,0 +1,23 @@
+App\Domain\Review\Review:
+  attributes:
+    id:
+      groups:
+        - ReviewRead
+    gitRepositoryUrl:
+      groups:
+        - ReviewRead
+    currentCommitHash:
+      groups:
+        - ReviewRead
+    automatedChecks:
+      groups:
+        - ReviewRead
+    status:
+      groups:
+        - ReviewRead
+    automatedChecksStatus:
+      groups:
+        - ReviewRead
+    user:
+      groups:
+        - ReviewRead

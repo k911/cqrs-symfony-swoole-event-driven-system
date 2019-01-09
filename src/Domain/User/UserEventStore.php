@@ -8,7 +8,6 @@ use App\Domain\User\Event\EventInterface;
 use Assert\Assertion;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -21,7 +20,6 @@ class UserEventStore
      * @var UserEventId
      * @ORM\Id()
      * @ORM\Column(type="user_event_id")
-     * @Groups({"UserEventRead"})
      */
     private $id;
 
@@ -29,28 +27,24 @@ class UserEventStore
      * @var User
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id",referencedColumnName="id")
-     * @Groups({"UserEventRead"})
      */
     private $user;
 
     /**
      * @var DateTimeImmutable
      * @ORM\Column(type="datetime_immutable")
-     * @Groups({"UserEventRead"})
      */
     private $createdAt;
 
     /**
      * @var array
      * @ORM\Column(type="json")
-     * @Groups({"UserEventRead"})
      */
     private $eventData;
 
     /**
      * @var string
      * @ORM\Column(type="string")
-     * @Groups({"UserEventRead"})
      */
     private $eventType;
 

@@ -1,0 +1,17 @@
+App\Domain\Review\ReviewEventStore:
+  attributes:
+    id:
+      groups:
+        - ReviewEventRead
+    review:
+      groups:
+        - ReviewEventRead
+    createdAt:
+      groups:
+        - ReviewEventRead
+    eventData:
+      groups:
+        - ReviewEventRead
+    eventType:
+      groups:
+        - ReviewEventRead

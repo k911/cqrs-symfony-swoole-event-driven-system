@@ -1,0 +1,17 @@
+App\Domain\User\UserEventStore:
+  attributes:
+    id:
+      groups:
+        - UserEventRead
+    user:
+      groups:
+        - UserEventRead
+    createdAt:
+      groups:
+        - UserEventRead
+    eventData:
+      groups:
+        - UserEventRead
+    eventType:
+      groups:
+        - UserEventRead

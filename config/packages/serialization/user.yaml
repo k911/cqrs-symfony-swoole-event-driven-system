@@ -1,0 +1,11 @@
+App\Domain\User\User:
+  attributes:
+    id:
+      groups:
+        - UserRead
+    email:
+      groups:
+        - UserRead
+    roles:
+      groups:
+        - UserRead

@@ -9,7 +9,6 @@ use App\Domain\User\User;
 use App\Domain\User\UserInterface;
 use Assert\Assertion;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\ORM\Repository\ReviewRepository")
@@ -36,42 +35,36 @@ class Review
      * @var ReviewId
      * @ORM\Id()
      * @ORM\Column(type="review_id")
-     * @Groups({"ReviewRead"})
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(type="string")
-     * @Groups({"ReviewRead"})
      */
     private $gitRepositoryUrl;
 
     /**
      * @var string
      * @ORM\Column(type="string")
-     * @Groups({"ReviewRead"})
      */
     private $currentCommitHash;
 
     /**
      * @var AutomatedCheck[]
      * @ORM\Column(type="automated_checks")
-     * @Groups({"ReviewRead"})
      */
     private $automatedChecks;
 
     /**
      * @var string
      * @ORM\Column(type="string")
-     * @Groups({"ReviewRead"})
      */
     private $status;
 
     /**
      * @var string
      * @ORM\Column(type="string")
-     * @Groups({"ReviewRead"})
      */
     private $automatedChecksStatus;
 
@@ -79,7 +72,6 @@ class Review
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Domain\User\User")
      * @ORM\JoinColumn(name="user_id",referencedColumnName="id")
-     * @Groups({"ReviewRead"})
      */
     private $user;
 

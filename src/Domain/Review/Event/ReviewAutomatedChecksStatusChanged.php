@@ -18,7 +18,7 @@ class ReviewAutomatedChecksStatusChanged implements EventInterface
 
     /**
      * @param string $reviewId
-     * @param $newAutomatedChecksStatus
+     * @param string $newAutomatedChecksStatus
      */
     public function __construct(string $reviewId, string $newAutomatedChecksStatus)
     {
