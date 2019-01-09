@@ -51,6 +51,12 @@ services:
     App\Application\Contract\GitRepositoryManagerInterface:
         class: App\Infrastructure\Git\CliGitRepositoryManager
 
+    App\Domain\User\UserEventNormalizerInterface:
+        class: App\Infrastructure\Serializer\UserEventNormalizer
+
+    App\Domain\Review\ReviewEventNormalizerInterface:
+        class: App\Infrastructure\Serializer\ReviewEventNormalizer
+
     App\Infrastructure\ApiPlatform\ReferencingIriConverter:
         decorates: 'api_platform.iri_converter'
         arguments:

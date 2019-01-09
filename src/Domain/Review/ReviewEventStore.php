@@ -6,11 +6,8 @@ namespace App\Domain\Review;
 
 use App\Domain\Review\Event\EventInterface;
 use App\Domain\User\UserInterface;
-use Assert\Assertion;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @ORM\Entity()
@@ -107,21 +104,17 @@ class ReviewEventStore
         return $this->eventType;
     }
 
-    public function asEvent(DenormalizerInterface $denormalizer): EventInterface
+    public function asEvent(ReviewEventNormalizerInterface $eventNormalizer): EventInterface
     {
-        /** @var EventInterface $obj */
-        $obj = $denormalizer->denormalize($this->getEventData() + [
+        return $eventNormalizer->denormalize($this->getEventData() + [
                 'reviewId' => $this->review->getId()->toString(),
                 'eventType' => $this->eventType,
             ], EventInterface::class, 'json');
-
-        return $obj;
     }
 
-    public static function fromEvent(EventInterface $event, Review $review, NormalizerInterface $normalizer): self
+    public static function fromEvent(EventInterface $event, Review $review, ReviewEventNormalizerInterface $eventNormalizer): self
     {
-        $data = $normalizer->normalize($event, 'json');
-        Assertion::isArray($data);
+        $data = $eventNormalizer->normalize($event, 'json');
         $type = $data['eventType'];
         unset($data['eventType'], $data['reviewId']);
 
