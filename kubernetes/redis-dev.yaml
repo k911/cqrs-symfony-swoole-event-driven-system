@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: redis
+    environment: development
+    type: cache
+spec:
+  selector:
+    matchLabels:
+      app: redis
+      environment: development
+      type: cache
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+        environment: development
+        type: cache
+    spec:
+      containers:
+        - name: redis
+          image: redis:5-alpine
+          imagePullPolicy: Always
+          ports:
+            - name: redis
+              containerPort: 6379
+          resources:
+            limits:
+              cpu: 100m
+              memory: 384Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis
+  labels:
+    app: redis
+    environment: development
+    type: cache
+spec:
+  type: ClusterIP
+  selector:
+    app: redis
+    environment: development
+    type: cache
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: redis

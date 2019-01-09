@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Documentation;
+namespace App\Infrastructure\Documentation;
 
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ContextAwareFilterInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;

@@ -8,13 +8,13 @@ use App\Application\Document\UserDocument;
 use App\Domain\User\Event\UserCreated;
 use App\Domain\User\User;
 use App\Domain\User\UserEmail;
+use App\Domain\User\UserEventNormalizerInterface;
 use App\Domain\User\UserEventStore;
 use App\Domain\User\UserId;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class UserFixtures extends Fixture
 {
@@ -23,8 +23,9 @@ class UserFixtures extends Fixture
 
     public function __construct(
         UserPasswordEncoderInterface $passwordEncoder,
-        NormalizerInterface $normalizer
-    ) {
+        UserEventNormalizerInterface $normalizer
+    )
+    {
         $this->passwordEncoder = $passwordEncoder;
         $this->normalizer = $normalizer;
     }

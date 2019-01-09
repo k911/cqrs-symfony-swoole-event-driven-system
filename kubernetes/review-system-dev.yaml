@@ -1,0 +1,216 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: review-system
+  labels:
+    app: review-system
+    environment: development
+    type: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: review-system
+      environment: development
+      type: backend
+  template:
+    metadata:
+      labels:
+        app: review-system
+        environment: development
+        type: backend
+    spec:
+      initContainers:
+        - name: drop-old-database
+          image: app-api:local
+          envFrom:
+            - configMapRef:
+                name: review-system-dev-envs
+          command:
+            - bin/console
+            - doctrine:database:drop
+            - --force
+            - --if-exists
+        - name: create-new-database
+          image: app-api:local
+          envFrom:
+            - configMapRef:
+                name: review-system-dev-envs
+          command:
+            - bin/console
+            - doctrine:database:create
+            - --if-not-exists
+        - name: update-db-schema
+          image: app-api:local
+          envFrom:
+            - configMapRef:
+                name: review-system-dev-envs
+          command:
+            - bin/console
+            - doctrine:schema:update
+            - --force
+        - name: load-fixtures
+          image: app-api:local
+          envFrom:
+            - configMapRef:
+                name: review-system-dev-envs
+          command:
+            - bin/console
+            - doctrine:fixtures:load
+            - -n
+      containers:
+        - name: api
+          image: app-api:local
+          envFrom:
+            - configMapRef:
+                name: review-system-dev-envs
+          command:
+            - bin/console
+            - swoole:server:run
+            - --host=0.0.0.0
+            - --port=8080
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 2
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /status?local=true
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /status
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 15
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: review-system-command-consumer
+  labels:
+    app: review-system
+    environment: development
+    type: command-consumer
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: review-system
+      environment: development
+      type: command-consumer
+  template:
+    metadata:
+      labels:
+        app: review-system
+        environment: development
+        type: command-consumer
+    spec:
+      containers:
+        - name: worker
+          image: app-command-consumer:local
+          envFrom:
+            - configMapRef:
+                name: review-system-dev-envs
+          command:
+            - bin/console
+            - messenger:consume-messages
+            - --bus=messenger.bus.commands
+            - commands
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 1
+              memory: 384Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: review-system-event-consumer
+  labels:
+    app: review-system
+    environment: development
+    type: event-consumer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: review-system
+      environment: development
+      type: event-consumer
+  template:
+    metadata:
+      labels:
+        app: review-system
+        environment: development
+        type: event-consumer
+    spec:
+      containers:
+        - name: worker
+          image: app-event-consumer:local
+          envFrom:
+            - configMapRef:
+                name: review-system-dev-envs
+          command:
+            - bin/console
+            - messenger:consume-messages
+            - --bus=messenger.bus.events
+            - events
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 1
+              memory: 384Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: review-system
+  labels:
+    app: review-system
+    environment: development
+    type: backend
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: http
+      nodePort: 30080
+  selector:
+    app: review-system
+    environment: development
+    type: backend
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: review-system-dev-envs
+data:
+  MONOLOG_STREAM_PATH: php://stdout
+  REDIS_URI: redis://redis:6379
+  ROUTER_CONTEXT_HOST: localhost
+  APP_ENV: dev
+  APP_SECRET: 49f777e1b1f0db6f2a7fd8b26d72eda6
+  TRUSTED_PROXIES: "*"
+  TRUSTED_HOSTS: "^localhost$"
+  CORS_ALLOW_ORIGIN: "^https?://localhost(:[0-9]+)?$"
+  DATABASE_URL: "mysql://root:Passw0rd@mysql:3306/database"
+  JWT_SECRET_KEY: "%kernel.project_dir%/config/jwt/private.pem"
+  JWT_PUBLIC_KEY: "%kernel.project_dir%/config/jwt/public.pem"
+  JWT_PASSPHRASE: 76878e968d150eeb23d5579675c9f194
+  MESSENGER_TRANSPORT_DSN: "amqp://user:password@rabbitmq:5672/%2f"
+  MERCURE_PUBLISH_URL: http://mercure:3333/hub
+  MERCURE_JWT_SECRET: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InN1YnNjcmliZSI6WyJmb28iLCJiYXIiXSwicHVibGlzaCI6WyJmb28iXX19.LRLvirgONK13JgacQ_VbcjySbVhkSmHy3IznH3tA9PM

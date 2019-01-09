@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Application\Cli;
 
 use App\Application\Contract\EventPublisherInterface;
 use App\Domain\User\Event\UserCreated;
@@ -11,20 +11,17 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
-class TestMercureCommand extends Command
+final class TestMercureCommand extends Command
 {
     protected static $defaultName = 'test:mercure';
 
     private $publisher;
-    private $serializer;
 
-    public function __construct(EventPublisherInterface $publisher, SerializerInterface $serializer)
+    public function __construct(EventPublisherInterface $publisher)
     {
         parent::__construct();
         $this->publisher = $publisher;
-        $this->serializer = $serializer;
     }
 
     protected function configure(): void

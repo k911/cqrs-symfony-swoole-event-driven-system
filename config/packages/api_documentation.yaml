@@ -4,25 +4,25 @@ services:
         autoconfigure: true
 
     app.swagger.user.search_filter:
-        class: App\Documentation\SwaggerSearchFilter
+        class: App\Infrastructure\Documentation\SwaggerSearchFilter
         decorates: app.domain.user.search_filter
         arguments:
             $decorated: '@app.swagger.user.search_filter.inner'
 
     app.swagger.user_event.search_filter:
-        class: App\Documentation\SwaggerSearchFilter
+        class: App\Infrastructure\Documentation\SwaggerSearchFilter
         decorates: app.domain.user_event.search_filter
         arguments:
             $decorated: '@app.swagger.user_event.search_filter.inner'
 
     app.swagger.review.search_filter:
-        class: App\Documentation\SwaggerSearchFilter
+        class: App\Infrastructure\Documentation\SwaggerSearchFilter
         decorates: app.domain.review.search_filter
         arguments:
             $decorated: '@app.swagger.review.search_filter.inner'
 
     app.swagger.review_event.search_filter:
-        class: App\Documentation\SwaggerSearchFilter
+        class: App\Infrastructure\Documentation\SwaggerSearchFilter
         decorates: app.domain.review_event.search_filter
         arguments:
             $decorated: '@app.swagger.review_event.search_filter.inner'

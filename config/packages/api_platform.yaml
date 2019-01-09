@@ -1,4 +1,10 @@
 api_platform:
+    title: Code Review System
+    description: Engeenering project created to ephasize advantages of combining DDD, CQRS and Event Sourcing patterns along with near real time updates via Server-Sent Events.
+    graphql:
+        enabled: true
+        graphiql:
+            enabled: true
     mapping:
         paths:
             - '%kernel.project_dir%/src/Application/Document'
@@ -34,5 +40,5 @@ api_platform:
     # Enable Swagger UI authorization.
     swagger:
         api_keys:
-            - { name: 'authorization', type: 'header' }
+            - { name: 'Authorization', type: 'header' }
             - { name: 'token', type: 'query' }

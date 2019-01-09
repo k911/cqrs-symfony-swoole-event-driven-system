@@ -1,4 +1,5 @@
 # Projekt Inżynierski - Dokumentacja deweloperska
+
 Autor: Konrad Obal
 
 ## Wymagania
@@ -72,11 +73,7 @@ docker-compose up -d
 - System nie wymaga autoryzacji
 - W polu `Subscribe`, należy wprowadzić następujące dane, aby nasłuchiwać na wszystkie rodzaje zdarzeń wyemitowane przez aplikacje:
 
-    ```
+    ```txt
     http://localhost/api/reviews
     http://localhost/api/users
     ```
-
-
-
-

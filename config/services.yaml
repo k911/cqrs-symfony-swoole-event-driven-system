@@ -22,7 +22,9 @@ services:
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Domain,Migrations,Tests,Documentation,Kernel.php}'
+        exclude:
+            - '../src/{DependencyInjection,Domain,Migrations,Tests,Documentation,Kernel.php}'
+            - '../src/Infrastructure/Documentation'
 
     App\Application\Command\Handler\:
         resource: '../src/Application/Command/Handler'
@@ -67,6 +69,10 @@ services:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
         arguments:
             - '@app.redis.client'
+
+    App\Application\ConnectionChecker\RedisConnectionChecker:
+        arguments:
+            $client: '@app.redis.client'
 
     app.redis.client:
         class: Predis\Client

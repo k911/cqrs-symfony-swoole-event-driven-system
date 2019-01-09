@@ -1,0 +1,114 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+    environment: development
+    type: database
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "2Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+    environment: development
+    type: database
+spec:
+  type: ClusterIP
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: mysql
+  selector:
+    app: mysql
+    environment: development
+    type: database
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+    environment: development
+    type: database
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mysql
+      environment: development
+      type: database
+  template:
+    metadata:
+      labels:
+        app: mysql
+        environment: development
+        type: database
+    spec:
+      initContainers:
+        - name: "remove-lost-found"
+          image: "busybox:1.29.3"
+          imagePullPolicy: "IfNotPresent"
+          command: ["rm", "-fr", "/var/lib/mysql/lost+found"]
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+      containers:
+        - name: mysql
+          image: "mysql:5.7"
+          imagePullPolicy: "Always"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 1
+              memory: 1Gi
+          env:
+            - name: MYSQL_DATABASE
+              value: database
+            - name: MYSQL_ROOT_PASSWORD
+              value: "Passw0rd"
+          ports:
+            - name: mysql
+              containerPort: 3306
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}"
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mysql

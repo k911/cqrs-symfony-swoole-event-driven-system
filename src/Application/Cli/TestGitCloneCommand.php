@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Application\Cli;
 
 use App\Application\Contract\GitRepositoryManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TestGitCloneCommand extends Command
+final class TestGitCloneCommand extends Command
 {
     protected static $defaultName = 'test:git:clone';
     private $gitRepositoryManager;
