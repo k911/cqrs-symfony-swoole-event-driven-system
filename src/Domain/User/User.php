@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domain\User;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\ORM\Repository\UserRepository")
- * @ApiFilter(SearchFilter::class, properties={"id": "exact","email": "exact"})
  */
 class User implements SymfonyUserInterface, UserInterface
 {

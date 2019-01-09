@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\User;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Domain\User\Event\EventInterface;
 use Assert\Assertion;
 use DateTimeImmutable;
@@ -17,8 +14,6 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @ORM\Entity()
- * @ApiFilter(SearchFilter::class, properties={"id": "exact","user.email": "exact"})
- * @ApiFilter(OrderFilter::class, properties={"createdAt": "ASC"})
  */
 class UserEventStore
 {

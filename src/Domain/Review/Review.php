@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\Review;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Domain\Review\Event\EventInterface;
 use App\Domain\User\User;
 use App\Domain\User\UserInterface;
@@ -14,8 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity
- * @ApiFilter(SearchFilter::class, properties={"id": "exact","user.email": "exact","user.id": "exact"})
+ * @ORM\Entity(repositoryClass="App\Infrastructure\ORM\Repository\ReviewRepository")
  */
 class Review
 {

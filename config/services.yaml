@@ -22,7 +22,7 @@ services:
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Domain,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Domain,Migrations,Tests,Documentation,Kernel.php}'
 
     App\Application\Command\Handler\:
         resource: '../src/Application/Command/Handler'

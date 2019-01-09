@@ -9,6 +9,8 @@ App\Domain\User\User:
     get:
       method: GET
       access_control: "is_granted('ROLE_ADMIN')"
+      filters:
+        - app.domain.user.search_filter
   itemOperations:
     get:
       method: GET
@@ -25,6 +27,9 @@ App\Domain\User\UserEventStore:
     get:
       method: GET
       access_control: "is_granted('ROLE_ADMIN')"
+      filters:
+        - app.domain.user_event.search_filter
+        - app.domain.user_event.order_filter
   itemOperations:
     get:
       method: GET

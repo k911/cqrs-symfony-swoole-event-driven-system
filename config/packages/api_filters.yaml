@@ -1,0 +1,42 @@
+services:
+    app.domain.user.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments:
+            - id: exact
+              email: exact
+        tags: [api_platform.filter]
+
+    app.domain.user_event.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments:
+            - id: exact
+              user.email: exact
+        tags: [api_platform.filter]
+
+    app.domain.user_event.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments:
+            - createdAt: ASC
+        tags: [api_platform.filter]
+
+    app.domain.review.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments:
+            - id: exact
+              user.email: exact
+              user.id: exact
+        tags: [api_platform.filter]
+
+    app.domain.review_event.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments:
+            - id: exact
+              user.email: exact
+              review.id: exact
+        tags: [api_platform.filter]
+
+    app.domain.review_event.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments:
+            - createdAt: ASC
+        tags: [api_platform.filter]

@@ -9,6 +9,8 @@ App\Domain\Review\Review:
     get:
       method: GET
       access_control: "is_granted('ROLE_ADMIN')"
+      filters:
+        - app.domain.review.search_filter
   itemOperations:
     get:
       method: GET
@@ -25,6 +27,9 @@ App\Domain\Review\ReviewEventStore:
     get:
       method: GET
       access_control: "is_granted('ROLE_ADMIN')"
+      filters:
+          - app.domain.review_event.search_filter
+          - app.domain.review_event.order_filter
   itemOperations:
     get:
       method: GET
