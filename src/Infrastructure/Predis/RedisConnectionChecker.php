@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Application\ConnectionChecker;
+namespace App\Infrastructure\Predis;
 
+use App\Application\Contract\ConnectionCheckerInterface;
 use Predis\Client;
 
 final class RedisConnectionChecker implements ConnectionCheckerInterface

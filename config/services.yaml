@@ -16,15 +16,19 @@ services:
         autoconfigure: true
         bind:
             string $gitClonerPath: '%git.cloner.path%'
-            $commandBus: '@messenger.bus.commands'
-            $eventBus: '@messenger.bus.events'
-    #            $queryBus: '@messenger.bus.queries'
+            Symfony\Component\Messenger\MessageBusInterface $commandBus: '@messenger.bus.commands'
+            Symfony\Component\Messenger\MessageBusInterface $eventBus: '@messenger.bus.events'
+            Symfony\Component\Messenger\MessageBusInterface $queryBus: '@messenger.bus.queries'
 
     App\:
         resource: '../src/*'
         exclude:
             - '../src/{DependencyInjection,Domain,Migrations,Tests,Documentation,Kernel.php}'
             - '../src/Infrastructure/Documentation'
+
+    App\Application\Query\Handler\:
+        resource: '../src/Application/Query/Handler'
+        tags: [{ name: messenger.message_handler, bus: messenger.bus.queries }]
 
     App\Application\Command\Handler\:
         resource: '../src/Application/Command/Handler'
@@ -59,6 +63,9 @@ services:
     App\Domain\Review\ReviewEventNormalizerInterface:
         class: App\Infrastructure\Serializer\ReviewEventNormalizer
 
+    App\Application\Contract\QueryBusInterface:
+        class: App\Infrastructure\Messenger\QueryBus
+
     App\Infrastructure\ApiPlatform\ReferencingIriConverter:
         decorates: 'api_platform.iri_converter'
         arguments:
@@ -70,7 +77,7 @@ services:
         arguments:
             - '@app.redis.client'
 
-    App\Application\ConnectionChecker\RedisConnectionChecker:
+    App\Infrastructure\Predis\RedisConnectionChecker:
         arguments:
             $client: '@app.redis.client'
 

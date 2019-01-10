@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\DataProvider;
+namespace App\Infrastructure\ApiPlatform;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;

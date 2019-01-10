@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Application\ConnectionChecker;
+namespace App\Infrastructure\ORM;
 
+use App\Application\Contract\ConnectionCheckerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class EntityManagerConnectionChecker implements ConnectionCheckerInterface
