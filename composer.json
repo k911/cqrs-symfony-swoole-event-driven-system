@@ -1,7 +1,7 @@
 {
     "type": "project",
-    "name": "k911/inz-final-app",
-    "description": "Finial Inz App",
+    "name": "k911/inz-app",
+    "description": "Final App",
     "license": "proprietary",
     "require": {
         "php": "^7.3",
