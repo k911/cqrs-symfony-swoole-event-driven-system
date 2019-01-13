@@ -12,7 +12,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:9501/api/reviews
+GET http://localhost:9501/api/reviews?group%5B%5D=UserReadLess&group%5B%5D=ReviewCommentReadLess
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 Content-Type: application/json

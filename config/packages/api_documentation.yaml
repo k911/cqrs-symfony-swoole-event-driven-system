@@ -21,6 +21,12 @@ services:
         arguments:
             $decorated: '@app.swagger.review.search_filter.inner'
 
+    app.swagger.review.group_filter:
+        class: App\Infrastructure\Documentation\SwaggerGroupFilter
+        decorates: 'app.domain.review.group_filter'
+        arguments:
+            $decorated: '@app.swagger.review.group_filter.inner'
+
     app.swagger.review_event.search_filter:
         class: App\Infrastructure\Documentation\SwaggerSearchFilter
         decorates: app.domain.review_event.search_filter

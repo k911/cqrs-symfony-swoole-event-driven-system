@@ -11,10 +11,13 @@ App\Domain\Review\Review:
       access_control: "is_granted('ROLE_ADMIN')"
       filters:
         - app.domain.review.search_filter
+        - app.domain.review.group_filter
   itemOperations:
     get:
       method: GET
       access_control: "is_granted('ROLE_ADMIN') or (user and object.isGranted(user))"
+      filters:
+        - app.domain.review.group_filter
 
 App\Domain\Review\ReviewEventStore:
   shortName: ReviewEvent

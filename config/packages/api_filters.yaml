@@ -19,6 +19,11 @@ services:
             - createdAt: ASC
         tags: [api_platform.filter]
 
+    app.domain.review.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['UserReadLess','ReviewCommentReadLess'] ]
+        tags: [ 'api_platform.filter' ]
+
     app.domain.review.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
         arguments:

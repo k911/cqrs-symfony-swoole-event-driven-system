@@ -3,9 +3,11 @@ App\Domain\User\User:
     id:
       groups:
         - UserRead
+        - UserReadLess
     email:
       groups:
         - UserRead
+        - UserReadLess
     roles:
       groups:
         - UserRead

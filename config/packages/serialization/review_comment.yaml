@@ -3,21 +3,27 @@ App\Domain\Review\ReviewComment:
     id:
       groups:
         - ReviewCommentRead
+        - ReviewCommentReadLess
     review:
       groups:
         - ReviewCommentRead
     createdAt:
       groups:
         - ReviewCommentRead
+        - ReviewCommentReadLess
     updatedAt:
       groups:
         - ReviewCommentRead
+        - ReviewCommentReadLess
     author:
       groups:
         - ReviewCommentRead
+        - ReviewCommentReadLess
     content:
       groups:
         - ReviewCommentRead
+        - ReviewCommentReadLess
     outdated:
       groups:
         - ReviewCommentRead
+        - ReviewCommentReadLess
