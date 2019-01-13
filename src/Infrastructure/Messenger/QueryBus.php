@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Infrastructure\Messenger;
@@ -31,18 +32,17 @@ final class QueryBus implements QueryBusInterface
         $handledStamps = $envelope->all(HandledStamp::class);
 
         if (!$handledStamps) {
-            throw new LogicException(sprintf('Message of type "%s" was handled zero times. Exactly one handler is expected when using "%s::%s()".', \get_class($envelope->getMessage()), \get_class($this), __FUNCTION__));
+            throw new LogicException(\sprintf('Message of type "%s" was handled zero times. Exactly one handler is expected when using "%s::%s()".', \get_class($envelope->getMessage()), \get_class($this), __FUNCTION__));
         }
 
         if (\count($handledStamps) > 1) {
-            $handlers = implode(', ', array_map(function (HandledStamp $stamp): string {
-                return sprintf('"%s"', $stamp->getHandlerAlias() ?? $stamp->getCallableName());
+            $handlers = \implode(', ', \array_map(function (HandledStamp $stamp): string {
+                return \sprintf('"%s"', $stamp->getHandlerAlias() ?? $stamp->getCallableName());
             }, $handledStamps));
 
-            throw new LogicException(sprintf('Message of type "%s" was handled multiple times. Only one handler is expected when using "%s::%s()", got %d: %s.', \get_class($envelope->getMessage()), \get_class($this), __FUNCTION__, \count($handledStamps), $handlers));
+            throw new LogicException(\sprintf('Message of type "%s" was handled multiple times. Only one handler is expected when using "%s::%s()", got %d: %s.', \get_class($envelope->getMessage()), \get_class($this), __FUNCTION__, \count($handledStamps), $handlers));
         }
 
         return $handledStamps[0]->getResult();
     }
-
 }

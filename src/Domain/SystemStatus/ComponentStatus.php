@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Domain\SystemStatus;
@@ -7,7 +8,6 @@ use JsonSerializable;
 
 final class ComponentStatus implements JsonSerializable
 {
-
     /**
      * @var bool
      */
@@ -20,7 +20,7 @@ final class ComponentStatus implements JsonSerializable
 
     /**
      * @param string $name
-     * @param bool $passed
+     * @param bool   $passed
      */
     public function __construct(string $name, bool $passed)
     {

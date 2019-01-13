@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Query\Handler;
@@ -17,8 +18,7 @@ final class QueryStatusHandler
     public function __construct(
         EntityManagerConnectionChecker $entityManagerConnectionChecker,
         RedisConnectionChecker $redisConnectionChecker
-    )
-    {
+    ) {
         $this->entityManagerConnectionChecker = $entityManagerConnectionChecker;
         $this->redisConnectionChecker = $redisConnectionChecker;
     }
@@ -34,5 +34,4 @@ final class QueryStatusHandler
             new ComponentStatus('DBMS', $this->entityManagerConnectionChecker->check()),
             );
     }
-
 }

@@ -24,8 +24,7 @@ class UserFixtures extends Fixture
     public function __construct(
         UserPasswordEncoderInterface $passwordEncoder,
         UserEventNormalizerInterface $normalizer
-    )
-    {
+    ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->normalizer = $normalizer;
     }

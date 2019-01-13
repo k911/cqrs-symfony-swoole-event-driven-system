@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Domain\SystemStatus;
@@ -28,7 +29,8 @@ final class SystemStatus implements JsonSerializable
 
     /**
      * @param iterable<ComponentStatus> $componentStatues
-     * @param DateTimeImmutable $checkedAt
+     * @param DateTimeImmutable         $checkedAt
+     *
      * @throws \Exception
      */
     public function __construct(iterable $componentStatues, DateTimeImmutable $checkedAt)
@@ -40,6 +42,7 @@ final class SystemStatus implements JsonSerializable
 
     /**
      * @param iterable<ComponentStatus> $componentStatuses
+     *
      * @return string
      */
     private function computeStatus(iterable $componentStatuses): string
@@ -56,7 +59,7 @@ final class SystemStatus implements JsonSerializable
 
     public function isOk(): bool
     {
-        return $this->status === self::STATUS_OK;
+        return self::STATUS_OK === $this->status;
     }
 
     /**
@@ -85,7 +88,6 @@ final class SystemStatus implements JsonSerializable
 
     public static function fromNow(ComponentStatus ...$componentStatuses): self
     {
-        /** @var iterable<ComponentStatus> $componentStatuses */
         return new self($componentStatuses, new DateTimeImmutable('now'));
     }
 

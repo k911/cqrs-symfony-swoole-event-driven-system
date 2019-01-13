@@ -66,6 +66,11 @@ services:
     App\Application\Contract\QueryBusInterface:
         class: App\Infrastructure\Messenger\QueryBus
 
+    'App\Infrastructure\Documentation\SwaggerDocumentation':
+        decorates: 'api_platform.swagger.normalizer.api_gateway'
+        arguments:
+            $decorated: '@App\Infrastructure\Documentation\SwaggerDocumentation.inner'
+
     App\Infrastructure\ApiPlatform\ReferencingIriConverter:
         decorates: 'api_platform.iri_converter'
         arguments:

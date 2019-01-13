@@ -1,0 +1,51 @@
+security:
+  methods:
+    header: BearerAuthHeader
+    query: QueryParamToken
+
+  open_paths:
+    /api/token: ['post']
+
+paths:
+  /api/token:
+    post:
+      tags: ['Token']
+      consumes: application/json
+      produces: application/json
+      summary: Authenticate using credentials
+      description: Authenticate using credentials
+      parameters:
+        - name: credentials
+          in: body
+          description: Valid User credentials
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: Successfully generated token
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: JWT Access Token
+              refresh_token:
+                type: string
+                description: Refresh Token
+        401:
+          description: Invalid Refresh Token
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code
+              message:
+                type: string
+                description: Error message
+
