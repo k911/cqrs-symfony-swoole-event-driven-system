@@ -64,3 +64,18 @@ App\Application\Document\ReviewChangeCommitDocument:
       method: POST
       path: '/reviews/{id}/change-commit'
       controller: App\Application\Action\ChangeReviewCommitAction
+
+App\Application\Document\ReviewAddCommentDocument:
+  shortName: Review
+  attributes:
+    iri: api_reviews_get_item
+    normalization_context:
+      groups: ['ReviewAddCommentRead']
+    denormalization_context:
+      groups: ['ReviewAddCommentWrite']
+  collectionOperations: []
+  itemOperations:
+    change_commit:
+      method: POST
+      path: '/reviews/{id}/comments/add'
+      controller: App\Application\Action\AddReviewCommentAction

@@ -7,10 +7,10 @@ namespace App\Application\Command\Handler;
 use App\Application\Command\CreateUserCommand;
 use App\Domain\User\Event\UserCreated;
 use App\Domain\User\User;
+use App\Domain\User\UserEventNormalizerInterface;
 use App\Domain\User\UserEventStore;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class CreateUserHandler
 {
@@ -21,7 +21,7 @@ class CreateUserHandler
     public function __construct(
         EntityManagerInterface $entityManager,
         MessageBusInterface $eventBus,
-        NormalizerInterface $normalizer
+        UserEventNormalizerInterface $normalizer
     ) {
         $this->entityManager = $entityManager;
         $this->eventBus = $eventBus;

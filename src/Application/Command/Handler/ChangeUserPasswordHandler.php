@@ -7,30 +7,30 @@ namespace App\Application\Command\Handler;
 use App\Application\Command\ChangeUserPasswordCommand;
 use App\Domain\User\Event\UserPasswordChanged;
 use App\Domain\User\User;
+use App\Domain\User\UserEventNormalizerInterface;
 use App\Domain\User\UserEventStore;
 use App\Domain\User\UserId;
 use App\Domain\User\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ChangeUserPasswordHandler
 {
     private $entityManager;
     private $eventBus;
     private $userRepository;
-    private $serializer;
+    private $normalizer;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         MessageBusInterface $eventBus,
         UserRepositoryInterface $userRepository,
-        NormalizerInterface $normalizer
+        UserEventNormalizerInterface $normalizer
     ) {
         $this->entityManager = $entityManager;
         $this->eventBus = $eventBus;
         $this->userRepository = $userRepository;
-        $this->serializer = $normalizer;
+        $this->normalizer = $normalizer;
     }
 
     public function __invoke(ChangeUserPasswordCommand $command): void
@@ -43,7 +43,7 @@ class ChangeUserPasswordHandler
 
         $this->entityManager->transactional(function () use ($user, $event): void {
             $user->changePassword($event);
-            $userEvent = UserEventStore::fromEvent($event, $user, $this->serializer);
+            $userEvent = UserEventStore::fromEvent($event, $user, $this->normalizer);
             $this->entityManager->persist($userEvent);
         });
 

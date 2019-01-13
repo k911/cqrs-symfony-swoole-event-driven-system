@@ -16,7 +16,7 @@ final class CreateReviewCommand
     /**
      * @var string
      */
-    private $userId;
+    private $ownerId;
 
     /**
      * @var string
@@ -30,14 +30,14 @@ final class CreateReviewCommand
 
     /**
      * @param string $id
-     * @param string $userId
+     * @param string $ownerId
      * @param string $gitRepositoryUrl
      * @param string $currentCommitHash
      */
-    public function __construct(string $id, string $userId, string $gitRepositoryUrl, string $currentCommitHash)
+    public function __construct(string $id, string $ownerId, string $gitRepositoryUrl, string $currentCommitHash)
     {
         $this->id = $id;
-        $this->userId = $userId;
+        $this->ownerId = $ownerId;
         $this->gitRepositoryUrl = $gitRepositoryUrl;
         $this->currentCommitHash = $currentCommitHash;
     }
@@ -63,9 +63,9 @@ final class CreateReviewCommand
     /**
      * @return string
      */
-    public function getUserId(): string
+    public function getOwnerId(): string
     {
-        return $this->userId;
+        return $this->ownerId;
     }
 
     /**

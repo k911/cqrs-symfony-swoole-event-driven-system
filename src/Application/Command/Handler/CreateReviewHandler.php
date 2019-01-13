@@ -7,13 +7,13 @@ namespace App\Application\Command\Handler;
 use App\Application\Command\CreateReviewCommand;
 use App\Domain\Review\Event\ReviewCreated;
 use App\Domain\Review\Review;
+use App\Domain\Review\ReviewEventNormalizerInterface;
 use App\Domain\Review\ReviewEventStore;
 use App\Domain\User\User;
 use App\Domain\User\UserId;
 use App\Domain\User\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class CreateReviewHandler
 {
@@ -25,7 +25,7 @@ class CreateReviewHandler
     public function __construct(
         EntityManagerInterface $entityManager,
         MessageBusInterface $eventBus,
-        NormalizerInterface $normalizer,
+        ReviewEventNormalizerInterface $normalizer,
         UserRepositoryInterface $userRepository
     ) {
         $this->entityManager = $entityManager;
@@ -38,13 +38,13 @@ class CreateReviewHandler
     {
         $event = new ReviewCreated(
             $command->getId(),
-            $command->getUserId(),
+            $command->getOwnerId(),
             $command->getGitRepositoryUrl(),
             $command->getCurrentCommitHash()
         );
 
         /** @var User $user */
-        $user = $this->userRepository->findById(UserId::fromString($command->getUserId()));
+        $user = $this->userRepository->findById(UserId::fromString($command->getOwnerId()));
 
         $this->entityManager->transactional(function () use ($event, $user): void {
             $review = Review::fromEvent($event, $user);

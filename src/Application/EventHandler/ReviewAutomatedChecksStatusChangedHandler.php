@@ -9,9 +9,6 @@ use App\Domain\Review\Event\ReviewAutomatedChecksStatusChanged;
 
 final class ReviewAutomatedChecksStatusChangedHandler
 {
-    /**
-     * @var EventPublisherInterface
-     */
     private $eventPublisher;
 
     public function __construct(EventPublisherInterface $eventPublisher)

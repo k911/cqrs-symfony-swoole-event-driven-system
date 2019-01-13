@@ -1,0 +1,23 @@
+App\Domain\Review\ReviewComment:
+  attributes:
+    id:
+      groups:
+        - ReviewCommentRead
+    review:
+      groups:
+        - ReviewCommentRead
+    createdAt:
+      groups:
+        - ReviewCommentRead
+    updatedAt:
+      groups:
+        - ReviewCommentRead
+    author:
+      groups:
+        - ReviewCommentRead
+    content:
+      groups:
+        - ReviewCommentRead
+    outdated:
+      groups:
+        - ReviewCommentRead

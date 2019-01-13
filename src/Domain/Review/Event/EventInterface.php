@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
  *    "review_check_finished"=ReviewCheckFinished::class,
  *    "review_automated_checks_status_changed"=ReviewAutomatedChecksStatusChanged::class,
  *    "review_commit_changed"=ReviewCommitChanged::class,
+ *    "review_comment_created"=ReviewCommentCreated::class,
  * })
  */
 interface EventInterface

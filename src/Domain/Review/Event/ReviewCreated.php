@@ -14,7 +14,7 @@ class ReviewCreated implements EventInterface
     /**
      * @var string
      */
-    private $userId;
+    private $ownerId;
 
     /**
      * @var string
@@ -28,14 +28,14 @@ class ReviewCreated implements EventInterface
 
     /**
      * @param string $reviewId
-     * @param string $userId
+     * @param string $ownerId
      * @param string $gitRepositoryUrl
      * @param string $commitHash
      */
-    public function __construct(string $reviewId, string $userId, string $gitRepositoryUrl, string $commitHash)
+    public function __construct(string $reviewId, string $ownerId, string $gitRepositoryUrl, string $commitHash)
     {
         $this->reviewId = $reviewId;
-        $this->userId = $userId;
+        $this->ownerId = $ownerId;
         $this->gitRepositoryUrl = $gitRepositoryUrl;
         $this->commitHash = $commitHash;
     }
@@ -43,9 +43,9 @@ class ReviewCreated implements EventInterface
     /**
      * @return string
      */
-    public function getUserId(): string
+    public function getOwnerId(): string
     {
-        return $this->userId;
+        return $this->ownerId;
     }
 
     /**

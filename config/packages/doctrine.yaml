@@ -22,6 +22,7 @@ doctrine:
             user_event_id: 'App\Infrastructure\ORM\Type\UserEventIdType'
             review_id: 'App\Infrastructure\ORM\Type\ReviewIdType'
             review_event_id: 'App\Infrastructure\ORM\Type\ReviewEventIdType'
+            review_comment_id: 'App\Infrastructure\ORM\Type\ReviewCommentIdType'
             automated_checks: 'App\Infrastructure\ORM\Type\AutomatedChecksType'
     orm:
         auto_generate_proxy_classes: true

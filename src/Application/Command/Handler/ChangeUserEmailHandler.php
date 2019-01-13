@@ -7,12 +7,12 @@ namespace App\Application\Command\Handler;
 use App\Application\Command\ChangeUserEmailCommand;
 use App\Domain\User\Event\UserEmailChanged;
 use App\Domain\User\User;
+use App\Domain\User\UserEventNormalizerInterface;
 use App\Domain\User\UserEventStore;
 use App\Domain\User\UserId;
 use App\Domain\User\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ChangeUserEmailHandler
 {
@@ -25,7 +25,7 @@ class ChangeUserEmailHandler
         EntityManagerInterface $entityManager,
         MessageBusInterface $eventBus,
         UserRepositoryInterface $userRepository,
-        NormalizerInterface $normalizer
+        UserEventNormalizerInterface $normalizer
     ) {
         $this->entityManager = $entityManager;
         $this->eventBus = $eventBus;

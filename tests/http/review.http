@@ -1,4 +1,4 @@
-POST http://localhost/api/reviews
+POST http://localhost:9501/api/reviews
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 Content-Type: application/json
@@ -12,32 +12,32 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost/api/reviews
+GET http://localhost:9501/api/reviews
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 Content-Type: application/json
 
 ###
 
-GET http://localhost/api/reviews/{{review_id}}
+GET http://localhost:9501/api/reviews/{{review_id}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
 
-GET http://localhost/api/review-events
+GET http://localhost:9501/api/review-events
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
 
-GET http://localhost/api/review-events?review.id={{review_id}}&order[createdAt]=ASC
+GET http://localhost:9501/api/review-events?review.id={{review_id}}&order[createdAt]=ASC
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ###
 
-POST http://localhost/api/reviews/{{review_id}}/change-commit
+POST http://localhost:9501/api/reviews/{{review_id}}/change-commit
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 Content-Type: application/json
@@ -48,18 +48,25 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost/api/reviews/{{review_id}}/comments/add
+POST http://localhost:9501/api/reviews
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 Content-Type: application/json
 
 {
-    "content": "Nieźle! :)"
+    "gitRepositoryUrl": "https://github.com/knit-pk/api-v1-php.git",
+    "currentCommitHash": "db91bad05129c140dff2dc153281bcbf8b69cf34"
 }
 
 ###
 
-GET http://localhost/api/review-comments?review.id={{review_id}}&order[createdAt]=ASC
+GET http://localhost:9501/api/review-comments?review.id={{review_id}}&order[createdAt]=ASC
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+###
+
+GET http://localhost:9501/api/review-comments?review.id={{review_id}}&order[createdAt]=ASC
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 

@@ -18,6 +18,9 @@ App\Domain\Review\Review:
     automatedChecksStatus:
       groups:
         - ReviewRead
-    user:
+    owner:
+      groups:
+        - ReviewRead
+    comments:
       groups:
         - ReviewRead

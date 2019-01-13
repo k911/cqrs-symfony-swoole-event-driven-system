@@ -48,6 +48,9 @@ services:
     App\Domain\Review\ReviewRepositoryInterface:
         class: App\Infrastructure\ORM\Repository\ReviewRepository
 
+    App\Domain\Review\ReviewCommentRepositoryInterface:
+        class: App\Infrastructure\ORM\Repository\ReviewCommentRepository
+
     App\Application\Contract\EventPublisherInterface:
         class: App\Infrastructure\Mercure\EventPublisher
 

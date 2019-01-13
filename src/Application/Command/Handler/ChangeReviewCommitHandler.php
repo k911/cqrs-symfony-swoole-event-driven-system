@@ -7,30 +7,30 @@ namespace App\Application\Command\Handler;
 use App\Application\Command\ChangeReviewCommitCommand;
 use App\Domain\Review\Event\ReviewCommitChanged;
 use App\Domain\Review\Review;
+use App\Domain\Review\ReviewEventNormalizerInterface;
 use App\Domain\Review\ReviewEventStore;
 use App\Domain\Review\ReviewId;
 use App\Domain\Review\ReviewRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ChangeReviewCommitHandler
 {
     private $entityManager;
     private $eventBus;
     private $reviewRepository;
-    private $serializer;
+    private $normalizer;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         MessageBusInterface $eventBus,
         ReviewRepositoryInterface $reviewRepository,
-        NormalizerInterface $normalizer
+        ReviewEventNormalizerInterface $normalizer
     ) {
         $this->entityManager = $entityManager;
         $this->eventBus = $eventBus;
         $this->reviewRepository = $reviewRepository;
-        $this->serializer = $normalizer;
+        $this->normalizer = $normalizer;
     }
 
     public function __invoke(ChangeReviewCommitCommand $command): void
@@ -43,7 +43,7 @@ class ChangeReviewCommitHandler
 
         $this->entityManager->transactional(function () use ($review, $event): void {
             $review->apply($event);
-            $userEvent = ReviewEventStore::fromEvent($event, $review, $this->serializer);
+            $userEvent = ReviewEventStore::fromEvent($event, $review, $this->normalizer);
             $this->entityManager->persist($userEvent);
         });
 

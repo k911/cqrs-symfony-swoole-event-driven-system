@@ -9,9 +9,6 @@ use App\Domain\User\Event\UserEmailChanged;
 
 final class UserEmailChangedHandler
 {
-    /**
-     * @var EventPublisherInterface
-     */
     private $eventPublisher;
 
     public function __construct(EventPublisherInterface $eventPublisher)

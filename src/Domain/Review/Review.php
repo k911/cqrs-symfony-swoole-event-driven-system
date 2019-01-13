@@ -8,6 +8,7 @@ use App\Domain\Review\Event\EventInterface;
 use App\Domain\User\User;
 use App\Domain\User\UserInterface;
 use Assert\Assertion;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -71,20 +72,26 @@ class Review
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="App\Domain\User\User")
-     * @ORM\JoinColumn(name="user_id",referencedColumnName="id")
+     * @ORM\JoinColumn(name="owner_id",referencedColumnName="id")
      */
-    private $user;
+    private $owner;
+
+    /**
+     * @var iterable<ReviewComment>&ArrayCollection
+     * @ORM\OneToMany(targetEntity="App\Domain\Review\ReviewComment",mappedBy="review", cascade={"persist","remove"})
+     */
+    private $comments;
 
     /**
      * @param ReviewId $id
      * @param string   $gitRepositoryUrl
      * @param string   $currentCommitHash
-     * @param User     $user
+     * @param User     $owner
      */
-    public function __construct(ReviewId $id, string $gitRepositoryUrl, string $currentCommitHash, User $user)
+    public function __construct(ReviewId $id, string $gitRepositoryUrl, string $currentCommitHash, User $owner)
     {
         $this->id = $id;
-        $this->user = $user;
+        $this->owner = $owner;
 
         Assertion::notBlank($gitRepositoryUrl);
         $this->gitRepositoryUrl = $gitRepositoryUrl;
@@ -95,23 +102,39 @@ class Review
         $this->changeStatus(self::STATUS_OPEN);
         $this->changeAutomatedChecksStatus(self::AUTOMATED_CHECKS_STATUS_WAITING);
         $this->automatedChecks = [];
+        $this->comments = new ArrayCollection();
     }
 
-    public function apply(EventInterface $event): void
+    public function addComment(Event\ReviewCommentCreated $commentCreated, User $commentAuthor): void
+    {
+        $this->comments->add(
+            ReviewComment::fromEvent($commentCreated, $this, $commentAuthor)
+        );
+    }
+
+    public function apply(EventInterface $event, ...$args): void
     {
         $eventClass = \get_class($event);
         switch ($eventClass) {
+            case Event\ReviewCommentCreated::class:
+                /** @var Event\ReviewCommentCreated $reviewCommentCreated */
+                $reviewCommentCreated = $event;
+                Assertion::isInstanceOf($args[0], User::class);
+                $this->addComment($reviewCommentCreated, $args[0]);
+                break;
             case Event\ReviewCommitChanged::class:
-                /* @var Event\ReviewCommitChanged $event */
-                $this->currentCommitHash = $event->getNewCommitHash();
+                /** @var Event\ReviewCommitChanged $reviewCommitChanged */
+                $reviewCommitChanged = $event;
+                $this->currentCommitHash = $reviewCommitChanged->getNewCommitHash();
                 break;
             case Event\ReviewCheckFinished::class:
-                /* @var Event\ReviewCheckFinished $event */
+                /** @var Event\ReviewCheckFinished $reviewCheckFinished */
+                $reviewCheckFinished = $event;
                 $this->addAutomatedCheck(new AutomatedCheck(
-                    $event->getCheckName(),
-                    $event->getCommitHash(),
-                    $event->getResult(),
-                    $event->isPassed()
+                    $reviewCheckFinished->getCheckName(),
+                    $reviewCheckFinished->getCommitHash(),
+                    $reviewCheckFinished->getResult(),
+                    $reviewCheckFinished->isPassed()
                 ));
                 break;
             case Event\ReviewNeedsCheck::class:
@@ -158,19 +181,19 @@ class Review
         $this->changeAutomatedChecksStatus($succeeded ? self::AUTOMATED_CHECKS_STATUS_SUCCEED : self::AUTOMATED_CHECKS_STATUS_WAITING);
     }
 
-    public static function fromEvent(Event\ReviewCreated $event, User $user): self
+    public static function fromEvent(Event\ReviewCreated $event, User $owner): self
     {
         return new self(ReviewId::fromString($event->getReviewId()),
             $event->getGitRepositoryUrl(),
             $event->getCommitHash(),
-            $user
+            $owner
         );
     }
 
     public function isGranted(object $user): bool
     {
         if ($user instanceof UserInterface) {
-            return $this->user->isGranted($user);
+            return $this->owner->isGranted($user);
         }
 
         return false;
@@ -239,8 +262,16 @@ class Review
     /**
      * @return User
      */
-    public function getUser(): User
+    public function getOwner(): User
     {
-        return $this->user;
+        return $this->owner;
+    }
+
+    /**
+     * @return iterable<ReviewComment>
+     */
+    public function getComments(): iterable
+    {
+        return $this->comments;
     }
 }

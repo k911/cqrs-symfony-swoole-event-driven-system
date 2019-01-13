@@ -9,9 +9,6 @@ use App\Domain\User\Event\UserPasswordChanged;
 
 final class UserPasswordChangedHandler
 {
-    /**
-     * @var EventPublisherInterface
-     */
     private $eventPublisher;
 
     public function __construct(EventPublisherInterface $eventPublisher)

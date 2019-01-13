@@ -27,6 +27,21 @@ services:
               user.id: exact
         tags: [api_platform.filter]
 
+    app.domain.review_comment.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments:
+            - id: exact
+              review.id: exact
+              user.email: exact
+              user.id: exact
+        tags: [api_platform.filter]
+
+    app.domain.review_comment.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments:
+            - createdAt: ASC
+        tags: [api_platform.filter]
+
     app.domain.review_event.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
         arguments:

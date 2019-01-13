@@ -1,0 +1,18 @@
+App\Domain\Review\ReviewComment:
+  shortName: ReviewComment
+  attributes:
+    normalization_context:
+      groups: ['ReviewCommentRead']
+    denormalization_context:
+      groups: ['ReviewCommentWrite']
+  collectionOperations:
+    get:
+      method: GET
+      access_control: "is_granted('ROLE_ADMIN')"
+      filters:
+        - app.domain.review_comment.search_filter
+        - app.domain.review_comment.order_filter
+  itemOperations:
+    get:
+      method: GET
+      access_control: "is_granted('ROLE_ADMIN') or (user and object.isGranted(user))"

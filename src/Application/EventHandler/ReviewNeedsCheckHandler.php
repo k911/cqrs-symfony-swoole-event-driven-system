@@ -9,12 +9,12 @@ use App\Application\Contract\EventPublisherInterface;
 use App\Domain\Review\AutomatedCheck;
 use App\Domain\Review\Event\ReviewNeedsCheck;
 use App\Domain\Review\Review;
+use App\Domain\Review\ReviewEventNormalizerInterface;
 use App\Domain\Review\ReviewEventStore;
 use App\Domain\Review\ReviewId;
 use App\Domain\Review\ReviewRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class ReviewNeedsCheckHandler
 {
@@ -22,16 +22,13 @@ final class ReviewNeedsCheckHandler
     private $entityManager;
     private $normalizer;
     private $reviewRepository;
-    /**
-     * @var MessageBusInterface
-     */
     private $commandBus;
 
     public function __construct(
         EventPublisherInterface $eventPublisher,
         MessageBusInterface $commandBus,
         EntityManagerInterface $entityManager,
-        NormalizerInterface $normalizer,
+        ReviewEventNormalizerInterface $normalizer,
         ReviewRepositoryInterface $reviewRepository
     ) {
         $this->eventPublisher = $eventPublisher;

@@ -20,6 +20,9 @@ framework:
              'App\Domain\Review\Event\ReviewNeedsCheck': events
              'App\Domain\Review\Event\ReviewCheckFinished': events
              'App\Domain\Review\Event\ReviewAutomatedChecksStatusChanged': events
+             # ReviewComments
+             'App\Application\Command\AddReviewCommentCommand': commands
+             'App\Domain\Review\Event\ReviewCommentCreated': events
 
         default_bus: messenger.bus.commands
         buses:
