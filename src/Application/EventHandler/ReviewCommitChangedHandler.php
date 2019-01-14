@@ -20,13 +20,14 @@ final class ReviewCommitChangedHandler
         $this->eventBus = $eventBus;
     }
 
-    public function __invoke(ReviewCommitChanged $reviewCreated): void
+    public function __invoke(ReviewCommitChanged $reviewCommitChanged): void
     {
-        $this->eventPublisher->publish('/api/reviews', $reviewCreated->getReviewId(), $reviewCreated);
+        $this->eventPublisher->publish('/api/reviews', $reviewCommitChanged->getReviewId(), $reviewCommitChanged);
 
         $this->eventBus->dispatch(new ReviewNeedsCheck(
-                $reviewCreated->getReviewId(),
-                $reviewCreated->getNewCommitHash())
+                $reviewCommitChanged->getReviewId(),
+                $reviewCommitChanged->getNewCommitHash(),
+                $reviewCommitChanged->getEnabledChecks())
         );
     }
 }

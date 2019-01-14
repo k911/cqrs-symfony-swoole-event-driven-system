@@ -172,7 +172,7 @@ class StartCheckCommandHandler
 
                 return $this->runPHPStan($repository);
                 break;
-            case AutomatedCheck::CHECK_NAME_PHPCSFIXER:
+            case AutomatedCheck::CHECK_NAME_PHP_CS_FIXER:
                 $this->optionallyInstallComposer($repository);
 
                 return $this->runPHPCSFixer($repository);

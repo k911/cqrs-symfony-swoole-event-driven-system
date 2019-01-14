@@ -15,11 +15,16 @@ class ReviewNeedsCheck implements EventInterface
      * @var string
      */
     private $commitHash;
+    /**
+     * @var string[]
+     */
+    private $enabledChecks;
 
-    public function __construct(string $reviewId, string $commitHash)
+    public function __construct(string $reviewId, string $commitHash, array $enabledChecks)
     {
         $this->reviewId = $reviewId;
         $this->commitHash = $commitHash;
+        $this->enabledChecks = $enabledChecks;
     }
 
     /**
@@ -38,5 +43,13 @@ class ReviewNeedsCheck implements EventInterface
     public function getEventType(): string
     {
         return 'review_needs_check';
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getEnabledChecks(): array
+    {
+        return $this->enabledChecks;
     }
 }

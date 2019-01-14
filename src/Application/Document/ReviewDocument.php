@@ -6,6 +6,7 @@ namespace App\Application\Document;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Application\Contract\IdentifiedDocumentInterface;
+use App\Domain\Review\AutomatedCheck;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -40,6 +41,14 @@ final class ReviewDocument implements IdentifiedDocumentInterface
      * @var string
      */
     public $userId;
+
+    /**
+     * @var string[]
+     * @Assert\Length()
+     * @Assert\Choice(choices=AutomatedCheck::VALID_CHECK_NAMES)
+     * @Groups({"ReviewRead","ReviewWrite"})
+     */
+    public $enabledChecks;
 
     public static function fromId(string $id): self
     {

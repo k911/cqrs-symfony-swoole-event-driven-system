@@ -9,6 +9,9 @@ App\Domain\Review\Review:
     currentCommitHash:
       groups:
         - ReviewRead
+    enabledChecks:
+      groups:
+        - ReviewRead
     automatedChecks:
       groups:
         - ReviewRead

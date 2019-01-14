@@ -27,17 +27,24 @@ class ReviewCreated implements EventInterface
     private $commitHash;
 
     /**
+     * @var string[]
+     */
+    private $enabledChecks;
+
+    /**
      * @param string $reviewId
      * @param string $ownerId
      * @param string $gitRepositoryUrl
      * @param string $commitHash
+     * @param array  $enabledChecks
      */
-    public function __construct(string $reviewId, string $ownerId, string $gitRepositoryUrl, string $commitHash)
+    public function __construct(string $reviewId, string $ownerId, string $gitRepositoryUrl, string $commitHash, array $enabledChecks)
     {
         $this->reviewId = $reviewId;
         $this->ownerId = $ownerId;
         $this->gitRepositoryUrl = $gitRepositoryUrl;
         $this->commitHash = $commitHash;
+        $this->enabledChecks = $enabledChecks;
     }
 
     /**
@@ -72,5 +79,13 @@ class ReviewCreated implements EventInterface
     public function getEventType(): string
     {
         return 'review_created';
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getEnabledChecks(): array
+    {
+        return $this->enabledChecks;
     }
 }

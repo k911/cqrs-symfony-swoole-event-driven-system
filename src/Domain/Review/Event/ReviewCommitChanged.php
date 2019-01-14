@@ -22,15 +22,22 @@ class ReviewCommitChanged implements EventInterface
     private $userId;
 
     /**
+     * @var string[]
+     */
+    private $enabledChecks;
+
+    /**
      * @param string $reviewId
      * @param string $newCommitHash
      * @param string $userId
+     * @param array  $enabledChecks
      */
-    public function __construct(string $reviewId, string $newCommitHash, string $userId)
+    public function __construct(string $reviewId, string $newCommitHash, string $userId, array $enabledChecks)
     {
         $this->reviewId = $reviewId;
         $this->newCommitHash = $newCommitHash;
         $this->userId = $userId;
+        $this->enabledChecks = $enabledChecks;
     }
 
     /**
@@ -57,5 +64,13 @@ class ReviewCommitChanged implements EventInterface
     public function getEventType(): string
     {
         return 'review_commit_changed';
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getEnabledChecks(): array
+    {
+        return $this->enabledChecks;
     }
 }

@@ -10,11 +10,13 @@ use JsonSerializable;
 final class AutomatedCheck implements JsonSerializable
 {
     public const CHECK_NAME_PHPSTAN = 'PHPStan';
-    public const CHECK_NAME_PHPCSFIXER = 'PHP-CS-Fixer';
+    public const CHECK_NAME_PHP_CS_FIXER = 'PHP-CS-Fixer';
+    public const CHECK_NAME_ESLINT = 'ESLint';
 
     public const VALID_CHECK_NAMES = [
-        self::CHECK_NAME_PHPCSFIXER,
+        self::CHECK_NAME_PHP_CS_FIXER,
         self::CHECK_NAME_PHPSTAN,
+        self::CHECK_NAME_ESLINT,
     ];
 
     /**

@@ -52,6 +52,12 @@ class Review
     private $currentCommitHash;
 
     /**
+     * @var string[]
+     * @ORM\Column(type="json")
+     */
+    private $enabledChecks;
+
+    /**
      * @var AutomatedCheck[]
      * @ORM\Column(type="automated_checks")
      */
@@ -87,8 +93,9 @@ class Review
      * @param string   $gitRepositoryUrl
      * @param string   $currentCommitHash
      * @param User     $owner
+     * @param string[] $enabledChecks
      */
-    public function __construct(ReviewId $id, string $gitRepositoryUrl, string $currentCommitHash, User $owner)
+    public function __construct(ReviewId $id, string $gitRepositoryUrl, string $currentCommitHash, User $owner, array $enabledChecks)
     {
         $this->id = $id;
         $this->owner = $owner;
@@ -103,6 +110,13 @@ class Review
         $this->changeAutomatedChecksStatus(self::AUTOMATED_CHECKS_STATUS_WAITING);
         $this->automatedChecks = [];
         $this->comments = new ArrayCollection();
+
+        $this->enabledChecks = [];
+        foreach ($enabledChecks as $enabledCheck) {
+            $this->enableCheck($enabledCheck);
+        }
+
+        Assertion::count($this->enabledChecks, \sprintf('At least a single automated check must be enabled. Checks: %s', \implode(', ', AutomatedCheck::VALID_CHECK_NAMES)));
     }
 
     public function addComment(Event\ReviewCommentCreated $commentCreated, User $commentAuthor): void
@@ -146,12 +160,10 @@ class Review
         }
     }
 
-    private function requiredChecksToPass(): array
+    private function enableCheck(string $checkName): void
     {
-        return [
-            AutomatedCheck::CHECK_NAME_PHPCSFIXER,
-            AutomatedCheck::CHECK_NAME_PHPSTAN,
-        ];
+        Assertion::inArray($checkName, AutomatedCheck::VALID_CHECK_NAMES);
+        $this->enabledChecks[] = $checkName;
     }
 
     private function addAutomatedCheck(AutomatedCheck $automatedCheck): void
@@ -162,7 +174,7 @@ class Review
 
     private function reviewAutomatedCheckStatus(): void
     {
-        $needed = \array_flip($this->requiredChecksToPass());
+        $needed = \array_flip($this->getEnabledChecks());
         $passedCount = 0;
 
         foreach ($this->automatedChecks as $automatedCheck) {
@@ -186,7 +198,8 @@ class Review
         return new self(ReviewId::fromString($event->getReviewId()),
             $event->getGitRepositoryUrl(),
             $event->getCommitHash(),
-            $owner
+            $owner,
+            $event->getEnabledChecks()
         );
     }
 
@@ -273,5 +286,13 @@ class Review
     public function getComments(): iterable
     {
         return $this->comments;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getEnabledChecks(): array
+    {
+        return $this->enabledChecks;
     }
 }

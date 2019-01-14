@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Application\Command;
 
 use App\Application\Document\ReviewDocument;
+use App\Domain\Review\AutomatedCheck;
+use Assert\Assertion;
 
 final class CreateReviewCommand
 {
@@ -29,17 +31,27 @@ final class CreateReviewCommand
     private $currentCommitHash;
 
     /**
+     * @var string[]
+     */
+    private $enabledChecks;
+
+    /**
      * @param string $id
      * @param string $ownerId
      * @param string $gitRepositoryUrl
      * @param string $currentCommitHash
+     * @param array  $enabledChecks
      */
-    public function __construct(string $id, string $ownerId, string $gitRepositoryUrl, string $currentCommitHash)
+    public function __construct(string $id, string $ownerId, string $gitRepositoryUrl, string $currentCommitHash, array $enabledChecks)
     {
         $this->id = $id;
         $this->ownerId = $ownerId;
         $this->gitRepositoryUrl = $gitRepositoryUrl;
         $this->currentCommitHash = $currentCommitHash;
+
+        Assertion::minCount($enabledChecks, 1, 'Review must have defined at least single automated check.');
+        Assertion::allInArray($enabledChecks, AutomatedCheck::VALID_CHECK_NAMES);
+        $this->enabledChecks = $enabledChecks;
     }
 
     public static function fromReviewDocument(ReviewDocument $document): self
@@ -48,7 +60,8 @@ final class CreateReviewCommand
             $document->id,
             $document->userId,
             $document->gitRepositoryUrl,
-            $document->currentCommitHash
+            $document->currentCommitHash,
+            $document->enabledChecks
         );
     }
 
@@ -82,5 +95,13 @@ final class CreateReviewCommand
     public function getCurrentCommitHash(): string
     {
         return $this->currentCommitHash;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getEnabledChecks(): array
+    {
+        return $this->enabledChecks;
     }
 }

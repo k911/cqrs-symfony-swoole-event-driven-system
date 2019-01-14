@@ -26,7 +26,8 @@ final class ReviewCreatedHandler
 
         $this->eventBus->dispatch(new ReviewNeedsCheck(
                 $reviewCreated->getReviewId(),
-                $reviewCreated->getCommitHash())
+                $reviewCreated->getCommitHash(),
+                $reviewCreated->getEnabledChecks())
         );
     }
 }

@@ -6,7 +6,6 @@ namespace App\Application\EventHandler;
 
 use App\Application\Command\StartReviewCheckCommand;
 use App\Application\Contract\EventPublisherInterface;
-use App\Domain\Review\AutomatedCheck;
 use App\Domain\Review\Event\ReviewNeedsCheck;
 use App\Domain\Review\Review;
 use App\Domain\Review\ReviewEventNormalizerInterface;
@@ -50,19 +49,14 @@ final class ReviewNeedsCheckHandler
             $this->entityManager->persist(ReviewEventStore::fromEvent($reviewNeedsCheck, $review, $this->normalizer));
         });
 
-        $this->commandBus->dispatch(new StartReviewCheckCommand(
-            $reviewNeedsCheck->getReviewId(),
-            AutomatedCheck::CHECK_NAME_PHPSTAN,
-            $review->getGitRepositoryUrl(),
-            $reviewNeedsCheck->getCommitHash()
-        ));
-
-        $this->commandBus->dispatch(new StartReviewCheckCommand(
-            $reviewNeedsCheck->getReviewId(),
-            AutomatedCheck::CHECK_NAME_PHPCSFIXER,
-            $review->getGitRepositoryUrl(),
-            $reviewNeedsCheck->getCommitHash()
-        ));
+        foreach ($reviewNeedsCheck->getEnabledChecks() as $enabledCheck) {
+            $this->commandBus->dispatch(new StartReviewCheckCommand(
+                $reviewNeedsCheck->getReviewId(),
+                $enabledCheck,
+                $review->getGitRepositoryUrl(),
+                $reviewNeedsCheck->getCommitHash()
+            ));
+        }
 
         $this->entityManager->clear();
     }

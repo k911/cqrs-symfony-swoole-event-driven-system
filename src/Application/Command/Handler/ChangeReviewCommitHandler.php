@@ -35,11 +35,17 @@ class ChangeReviewCommitHandler
 
     public function __invoke(ChangeReviewCommitCommand $command): void
     {
-        $event = new ReviewCommitChanged($command->getReviewId(), $command->getNewCommitHash(), $command->getUserId());
-        $reviewId = ReviewId::fromString($event->getReviewId());
-
         /** @var Review $review */
-        $review = $this->reviewRepository->findById($reviewId);
+        $review = $this->reviewRepository->findById(
+            ReviewId::fromString($command->getReviewId())
+        );
+
+        $event = new ReviewCommitChanged(
+            $command->getReviewId(),
+            $command->getNewCommitHash(),
+            $command->getUserId(),
+            $review->getEnabledChecks()
+        );
 
         $this->entityManager->transactional(function () use ($review, $event): void {
             $review->apply($event);
