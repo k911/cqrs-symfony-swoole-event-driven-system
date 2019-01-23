@@ -26,49 +26,32 @@ spec:
           envFrom:
             - configMapRef:
                 name: review-system-dev-envs
-          command:
-            - bin/console
-            - doctrine:database:drop
-            - --force
-            - --if-exists
+          args: ["doctrine:database:drop", "--force", "--if-exists"]
         - name: create-new-database
           image: app-api:local
           envFrom:
             - configMapRef:
                 name: review-system-dev-envs
-          command:
-            - bin/console
-            - doctrine:database:create
-            - --if-not-exists
+          args: ["doctrine:database:create", "--if-not-exists"]
         - name: update-db-schema
           image: app-api:local
           envFrom:
             - configMapRef:
                 name: review-system-dev-envs
-          command:
-            - bin/console
-            - doctrine:schema:update
-            - --force
+          command: ["doctrine:schema:update", "--force"]
         - name: load-fixtures
           image: app-api:local
           envFrom:
             - configMapRef:
                 name: review-system-dev-envs
-          command:
-            - bin/console
-            - doctrine:fixtures:load
-            - -n
+          command: ["doctrine:fixtures:load", "-n"]
       containers:
         - name: api
           image: app-api:local
           envFrom:
             - configMapRef:
                 name: review-system-dev-envs
-          command:
-            - bin/console
-            - swoole:server:run
-            - --host=0.0.0.0
-            - --port=8080
+          args: ["swoole:server:run", "--host=0.0.0.0", "--port=8080"]
           ports:
             - name: http
               containerPort: 8080
@@ -120,11 +103,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: review-system-dev-envs
-          command:
-            - bin/console
-            - messenger:consume-messages
-            - --bus=messenger.bus.commands
-            - commands
+          args: ["messenger:consume-messages", "--bus=messenger.bus.commands", "commands"]
           resources:
             requests:
               cpu: 200m
@@ -161,11 +140,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: review-system-dev-envs
-          command:
-            - bin/console
-            - messenger:consume-messages
-            - --bus=messenger.bus.events
-            - events
+          args: ["messenger:consume-messages", "--bus=messenger.bus.events", "events"]
           resources:
             requests:
               cpu: 200m

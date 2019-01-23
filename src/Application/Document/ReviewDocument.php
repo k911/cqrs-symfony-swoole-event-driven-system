@@ -44,7 +44,7 @@ final class ReviewDocument implements IdentifiedDocumentInterface
 
     /**
      * @var string[]
-     * @Assert\Length()
+     * @Assert\Length(min="1")
      * @Assert\Choice(choices=AutomatedCheck::VALID_CHECK_NAMES)
      * @Groups({"ReviewRead","ReviewWrite"})
      */

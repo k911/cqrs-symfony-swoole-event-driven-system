@@ -1,6 +1,7 @@
 api_platform:
     title: Code Review System
-    description: Engeenering project created to ephasize advantages of combining DDD, CQRS and Event Sourcing patterns along with near real time updates via Server-Sent Events.
+    description: Engineering project created to emphasize advantages of combining DDD, CQRS and Event Sourcing patterns along with near real time updates via Server-Sent Events.
+    version: 1.0.0
     graphql:
         enabled: true
         graphiql:
