@@ -65,12 +65,13 @@ ENTRYPOINT ["php", "-d", "memory_limit=-1", "bin/console"]
 CMD ["list"]
 
 FROM base-no-source as WorkerSymfonyConsole
-RUN apk add --no-cache git
+RUN apk add --no-cache git nodejs yarn npm
 ENV COMPOSER_ALLOW_SUPERUSER=1
 COPY --from=composer-installer /usr/bin/composer /usr/local/bin/composer
 COPY --from=composer-installer /root/.composer /root/.composer
 RUN composer global require "phpstan/phpstan" "friendsofphp/php-cs-fixer" \
     --prefer-dist --no-progress --no-suggest --classmap-authoritative --ansi
+RUN yarn global add eslint
 COPY --from=app-installer /usr/src/app ./
 RUN mv .env.docker .env && \
     bin/console cache:clear --env docker && \

@@ -29,7 +29,7 @@ class ReviewComment
 
     /**
      * @var Review
-     * @ORM\ManyToOne(targetEntity="Review")
+     * @ORM\ManyToOne(targetEntity="Review",inversedBy="comments")
      * @ORM\JoinColumn(name="review_id",referencedColumnName="id")
      */
     private $review;

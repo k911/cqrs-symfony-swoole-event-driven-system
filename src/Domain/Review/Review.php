@@ -116,7 +116,7 @@ class Review
             $this->enableCheck($enabledCheck);
         }
 
-        Assertion::count($this->enabledChecks, \sprintf('At least a single automated check must be enabled. Checks: %s', \implode(', ', AutomatedCheck::VALID_CHECK_NAMES)));
+        Assertion::greaterThan(\count($this->enabledChecks), 0, \sprintf('At least a single automated check must be enabled. Checks: %s', \implode(', ', AutomatedCheck::VALID_CHECK_NAMES)));
     }
 
     public function addComment(Event\ReviewCommentCreated $commentCreated, User $commentAuthor): void

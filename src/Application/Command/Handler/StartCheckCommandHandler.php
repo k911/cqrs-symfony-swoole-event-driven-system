@@ -9,8 +9,11 @@ use App\Application\Contract\GitRepository;
 use App\Application\Contract\GitRepositoryManagerInterface;
 use App\Domain\Review\AutomatedCheck;
 use App\Domain\Review\Event\ReviewCheckFinished;
+use JsonException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Exception\ProcessSignaledException;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
 
 class StartCheckCommandHandler
 {
@@ -45,31 +48,45 @@ class StartCheckCommandHandler
         }
 
         try {
-            return [
-                true,
-                $this->sanitizeOutput($this->runCheck($repository, $command->getCheckName())),
-            ];
-        } catch (ProcessFailedException $exception) {
-            $process = $exception->getProcess();
             try {
+                $output = $this->runCheck($repository, $command->getCheckName());
                 return [
-                    false,
-                    $this->sanitizeOutput($process->getOutput()),
+                    true,
+                    $this->sanitizeOutput($output),
                 ];
-            } catch (\JsonException $exception) {
-                return [
-                    false,
-                    [
-                        'context' => $command->getCheckName(),
-                        'error' => [
-                            'message' => 'Check failed',
-                            'code' => $process->getExitCode(),
-                            'output' => $process->getOutput(),
-                            'errorOutput' => $process->getErrorOutput(),
+            } catch (ProcessFailedException|ProcessSignaledException|ProcessTimedOutException $exception) {
+                $process = $exception->getProcess();
+                try {
+                    return [
+                        false,
+                        $this->sanitizeOutput($process->getOutput()),
+                    ];
+                } catch (JsonException $exception) {
+                    return [
+                        false,
+                        [
+                            'context' => $command->getCheckName(),
+                            'error' => [
+                                'message' => 'Check failed',
+                                'code' => $process->getExitCode(),
+                                'output' => $process->getOutput(),
+                                'errorOutput' => $process->getErrorOutput(),
+                            ],
                         ],
-                    ],
-                ];
+                    ];
+                }
             }
+        } catch (JsonException $exception) {
+            return [
+                false,
+                [
+                    'context' => $command->getCheckName(),
+                    'error' => [
+                        'message' => 'Could not parse output as JSON.',
+                        'output' => $output,
+                    ],
+                ],
+            ];
         }
     }
 
@@ -125,11 +142,34 @@ class StartCheckCommandHandler
         $this->eventBus->dispatch($checkFinished);
     }
 
-    private function optionallyInstallComposer(GitRepository $repository): void
+    private function tryInstallComposerPackages(GitRepository $repository): void
     {
         if ($repository->fileExists('composer.json')) {
             $this->gitRepositoryManager->runCommand($repository, ['composer', 'install']);
         }
+    }
+
+    private function tryInstallNpmPackages(GitRepository $repository): void
+    {
+        if ($repository->fileExists('package.json')) {
+            if ($repository->fileExists('package-lock.json')) {
+                $this->gitRepositoryManager->runCommand($repository, ['npm', 'install']);
+            } else {
+                $this->gitRepositoryManager->runCommand($repository, ['yarn']);
+            }
+        }
+    }
+
+    private function runESLint(GitRepository $repository): string
+    {
+        $bin = $repository->fileExists('node_modules/.bin/eslint') ? 'node_modules/.bin/eslint' : 'eslint';
+
+        return $this->gitRepositoryManager->runCommand($repository, [
+            $bin,
+            'src',
+            '--format=json',
+            '--no-color',
+        ]);
     }
 
     private function runPHPStan(GitRepository $repository): string
@@ -167,13 +207,18 @@ class StartCheckCommandHandler
     private function runCheck(GitRepository $repository, string $checkName): string
     {
         switch ($checkName) {
+            case AutomatedCheck::CHECK_NAME_ESLINT:
+                $this->tryInstallNpmPackages($repository);
+
+                return $this->runESLint($repository);
+                break;
             case AutomatedCheck::CHECK_NAME_PHPSTAN:
-                $this->optionallyInstallComposer($repository);
+                $this->tryInstallComposerPackages($repository);
 
                 return $this->runPHPStan($repository);
                 break;
             case AutomatedCheck::CHECK_NAME_PHP_CS_FIXER:
-                $this->optionallyInstallComposer($repository);
+                $this->tryInstallComposerPackages($repository);
 
                 return $this->runPHPCSFixer($repository);
                 break;
@@ -182,6 +227,12 @@ class StartCheckCommandHandler
         }
     }
 
+    /**
+     * @param string $output
+     * @return array
+     *
+     * @throws JsonException
+     */
     private function sanitizeOutput(string $output): array
     {
         return \json_decode(

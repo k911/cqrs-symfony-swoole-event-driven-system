@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   api:
-    image: app-api:local
+    image: "${REPOSITORY:-docker.io}/${NAMESPACE:-k911}/${APP_PREFIX:-inz}-${APP_NAME:-api}:${APP_TAG:-local}"
     command:
       - swoole:server:run
       - --host=0.0.0.0
@@ -14,7 +14,7 @@ services:
       - "80:8080"
 
   command-consumer:
-    image: app-command-consumer:local
+    image: "${REPOSITORY:-docker.io}/${NAMESPACE:-k911}/${APP_PREFIX:-inz}-${APP_NAME:-command-consumer}:${APP_TAG:-local}"
     command:
       - messenger:consume-messages
       - --bus=messenger.bus.commands
@@ -25,7 +25,7 @@ services:
     env_file: .env.docker
 
   event-consumer:
-    image: app-event-consumer:local
+    image: "${REPOSITORY:-docker.io}/${NAMESPACE:-k911}/${APP_PREFIX:-inz}-${APP_NAME:-event-consumer}:${APP_TAG:-local}"
     command:
       - messenger:consume-messages
       - --bus=messenger.bus.events

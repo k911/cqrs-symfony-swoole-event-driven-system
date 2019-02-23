@@ -40,7 +40,8 @@ class CreateReviewHandler
             $command->getId(),
             $command->getOwnerId(),
             $command->getGitRepositoryUrl(),
-            $command->getCurrentCommitHash()
+            $command->getCurrentCommitHash(),
+            $command->getEnabledChecks()
         );
 
         /** @var User $user */

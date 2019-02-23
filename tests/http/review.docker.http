@@ -5,7 +5,12 @@ Content-Type: application/json
 
 {
     "gitRepositoryUrl": "https://github.com/k911/swoole-bundle.git",
-    "currentCommitHash": "c88fcf229e59edf8c2100b907a3dca0d14a78384"
+    "currentCommitHash": "c88fcf229e59edf8c2100b907a3dca0d14a78384",
+    "enabledChecks": [
+        "ESLint",
+        "PHP-CS-Fixer",
+        "PHPStan"
+    ]
 }
 
 > {% client.global.set("review_id", response.body.id); %}

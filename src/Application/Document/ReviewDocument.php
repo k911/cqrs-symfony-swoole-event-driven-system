@@ -43,9 +43,7 @@ final class ReviewDocument implements IdentifiedDocumentInterface
     public $userId;
 
     /**
-     * @var string[]
-     * @Assert\Length(min="1")
-     * @Assert\Choice(choices=AutomatedCheck::VALID_CHECK_NAMES)
+     * @var array
      * @Groups({"ReviewRead","ReviewWrite"})
      */
     public $enabledChecks;
