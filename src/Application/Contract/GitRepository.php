@@ -42,10 +42,31 @@ final class GitRepository
         return $this->location;
     }
 
+    public function isExecutable(string $executablePath): bool
+    {
+        return \is_executable($this->absolutePathFromRelative($executablePath));
+    }
+
     public function fileExists(string $filePath): bool
     {
-        $filePath = \ltrim($filePath, '\\/');
+        return \file_exists($this->absolutePathFromRelative($filePath));
+    }
 
-        return \file_exists($filePath);
+    private function absolutePathFromRelative($path): string
+    {
+        $path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
+        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+        $absolutes = [];
+        foreach ($parts as $part) {
+            if ('.' === $part) {
+                continue;
+            }
+            if ('..' === $part) {
+                array_pop($absolutes);
+            } else {
+                $absolutes[] = $part;
+            }
+        }
+        return sprintf('%s/%s', $this->location, implode(DIRECTORY_SEPARATOR, $absolutes));
     }
 }

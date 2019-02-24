@@ -144,37 +144,47 @@ class StartCheckCommandHandler
 
     private function tryInstallComposerPackages(GitRepository $repository): void
     {
-        if ($repository->fileExists('composer.json')) {
-            $this->gitRepositoryManager->runCommand($repository, ['composer', 'install']);
+        if (!$repository->fileExists('composer.json')) {
+            return;
         }
+
+        $this->gitRepositoryManager->runCommand($repository, ['composer', 'install']);
     }
 
     private function tryInstallNpmPackages(GitRepository $repository): void
     {
-        if ($repository->fileExists('package.json')) {
-            if ($repository->fileExists('package-lock.json')) {
-                $this->gitRepositoryManager->runCommand($repository, ['npm', 'install']);
-            } else {
-                $this->gitRepositoryManager->runCommand($repository, ['yarn']);
-            }
+        if (!$repository->fileExists('package.json')) {
+            return;
         }
+
+        if ($repository->fileExists('yarn.lock')) {
+            $this->gitRepositoryManager->runCommand($repository, ['yarn', 'install']);
+            return;
+        }
+
+        $this->gitRepositoryManager->runCommand($repository, ['npm', 'install']);
     }
 
     private function runESLint(GitRepository $repository): string
     {
-        $bin = $repository->fileExists('node_modules/.bin/eslint') ? 'node_modules/.bin/eslint' : 'eslint';
-
-        return $this->gitRepositoryManager->runCommand($repository, [
+        $bin = $repository->isExecutable('node_modules/.bin/eslint') ? 'node_modules/.bin/eslint' : 'eslint';
+        $args = [
             $bin,
             'src',
             '--format=json',
             '--no-color',
-        ]);
+        ];
+
+        if (!($repository->fileExists('.eslintrc.yml') || $repository->fileExists('.eslintrc.yaml') || $repository->fileExists('.eslintrc.json'))) {
+            $args[] = '--no-eslintrc';
+        }
+        dump($args);
+        return $this->gitRepositoryManager->runCommand($repository, $args);
     }
 
     private function runPHPStan(GitRepository $repository): string
     {
-        $bin = $repository->fileExists('vendor/bin/phpstan') ? 'vendor/bin/phpstan' : 'phpstan';
+        $bin = $repository->isExecutable('vendor/bin/phpstan') ? 'vendor/bin/phpstan' : 'phpstan';
 
         return $this->gitRepositoryManager->runCommand($repository, [
             $bin,
@@ -190,7 +200,7 @@ class StartCheckCommandHandler
 
     private function runPHPCSFixer(GitRepository $repository): string
     {
-        $bin = $repository->fileExists('vendor/bin/php-cs-fixer') ? 'vendor/bin/php-cs-fixer' : 'php-cs-fixer';
+        $bin = $repository->isExecutable('vendor/bin/php-cs-fixer') ? 'vendor/bin/php-cs-fixer' : 'php-cs-fixer';
 
         return $this->gitRepositoryManager->runCommand($repository, [
             $bin,
@@ -235,7 +245,6 @@ class StartCheckCommandHandler
      */
     private function sanitizeOutput(string $output): array
     {
-        return \json_decode(
-            \trim($output), true, 512, \JSON_THROW_ON_ERROR);
+        return \json_decode(\trim($output), true, 512, \JSON_THROW_ON_ERROR);
     }
 }

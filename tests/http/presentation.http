@@ -1,0 +1,125 @@
+
+# Admin login
+
+POST http://localhost:30080/api/token
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "super@admin.pl",
+    "password": "password"
+}
+
+> {%
+client.global.set("admin_token", response.body.token);
+%}
+
+###
+
+# Create user by admin
+
+POST http://localhost:30080/api/users
+Authorization: Bearer {{admin_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "user@test.pl",
+    "plainPassword": "user@test.pl",
+    "roles": [
+        "ROLE_USER"
+    ]
+}
+
+###
+
+# Newly created user login
+
+POST http://localhost:30080/api/token
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "user@test.pl",
+    "password": "user@test.pl"
+}
+
+> {%
+client.global.set("user_token", response.body.token);
+%}
+
+###
+
+# Create a new review
+
+POST http://localhost:30080/api/reviews
+Authorization: Bearer {{user_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "gitRepositoryUrl": "https://github.com/k911/swoole-bundle.git",
+    "currentCommitHash": "c88fcf229e59edf8c2100b907a3dca0d14a78384",
+    "enabledChecks": [
+        "PHPStan",
+        "PHP-CS-Fixer"
+    ]
+}
+
+> {% client.global.set("first_review_id", response.body.id); %}
+
+###
+
+# Get data projection of first review
+
+GET http://localhost:30080/api/reviews/{{first_review_id}}
+Authorization: Bearer {{user_token}}
+Accept: application/json
+
+###
+
+# Create a second review
+
+POST http://localhost:30080/api/reviews
+Authorization: Bearer {{user_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "gitRepositoryUrl": "https://github.com/knit-pk/api-admin-v1-reactjs.git",
+    "currentCommitHash": "a7f1073f08e96f32abed8ae721bf787e184af27f",
+    "enabledChecks": [
+        "ESLint"
+    ]
+}
+
+> {% client.global.set("second_review_id", response.body.id); %}
+
+###
+
+# Get data projection of second review
+
+GET http://localhost:30080/api/reviews/{{second_review_id}}
+Authorization: Bearer {{user_token}}
+Accept: application/json
+
+###
+
+# Update first review's commit to re-run automated checks
+
+POST http://localhost:30080/api/reviews/{{first_review_id}}/change-commit
+Authorization: Bearer {{user_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+    "newCommitHash": "9713e619c13799f6a6ae552b23f4afed4e90b910"
+}
+
+###
+
+# Get data projection of first review
+
+GET http://localhost:30080/api/reviews/{{first_review_id}}
+Authorization: Bearer {{user_token}}
+Accept: application/json

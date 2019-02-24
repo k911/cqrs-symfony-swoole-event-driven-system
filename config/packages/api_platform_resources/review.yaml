@@ -78,7 +78,7 @@ App\Application\Document\ReviewAddCommentDocument:
       groups: ['ReviewAddCommentWrite']
   collectionOperations: []
   itemOperations:
-    change_commit:
+    add_comment:
       method: POST
       path: '/reviews/{id}/comments/add'
       controller: App\Application\Action\AddReviewCommentAction
